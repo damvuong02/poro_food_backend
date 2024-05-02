@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('user_name')->unique();
             $table->string('password');
-            $table->string('name');
-            $table->string('roll');
+            $table->string('name');  
+            $table->enum('roll',['Đầu bếp', 'Quản lý', 'Thu ngân', 'Phục vụ']);
             $table->timestamps();
         });
 
