@@ -74,7 +74,7 @@ abstract class BaseRepository implements RepositoryInterface{
     }
     function search(string $column,$value)
     {
-        $result = $this->model->where($column,'like','%'.$value.'%')->paginate(8);
+        $result = $this->model->where($column,'like','%'.$value.'%')->paginate(10000);
         return $result;
     }
 
