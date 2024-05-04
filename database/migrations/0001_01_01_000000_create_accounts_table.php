@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('user_name')->unique();
             $table->string('password');
-            $table->string('name');
-            $table->string('roll');
+            $table->string('name');  
+            $table->enum('roll',['Đầu bếp', 'Quản lý', 'Thu ngân', 'Phục vụ']);
             $table->timestamps();
         });
 
