@@ -1,15 +1,14 @@
 <?php
 
-use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\AccountController;
 use Illuminate\Support\Facades\Route;
 
 //user section
-Route::get('/user/all-user',[UserController::class, 'getAllUser']);
-Route::post('/user/create-user',[UserController::class, 'createUser'])->middleware('auth:sanctum');
-Route::post('/user/update-user/{id}',[UserController::class, 'updateUser'])->middleware('auth:sanctum');
-Route::post('/user/delete-user/{id}',[UserController::class, 'deleteUser'])->middleware('auth:sanctum');
-Route::get('/user/search-user',[UserController::class, 'searchUser']);
+Route::get('/account/all-account',[AccountController::class, 'getAllAccount']);
+Route::post('/account/create-account',[AccountController::class, 'createAccount']);
+Route::post('/account/update-account/{id}',[AccountController::class, 'updateAccount']);
+Route::post('/account/delete-account/{id}',[AccountController::class, 'deleteAccount']);
+Route::get('/account/search-account',[AccountController::class, 'searchAccount']);
 
 
 

@@ -2,15 +2,15 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
+use App\Models\Account;
 use App\Repositories\BaseRepository;
 
-class UserRepository extends BaseRepository
+class AccountRepository extends BaseRepository
 {
 
     function getModel()
     {
-        return User::class;
+        return Account::class;
     }
 
     

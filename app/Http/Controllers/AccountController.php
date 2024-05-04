@@ -2,31 +2,35 @@
 
 namespace App\Http\Controllers;;
 
-use App\Services\UserService;
+use App\Services\AccountService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-class UserController extends Controller
+
+use function Pest\Laravel\json;
+
+class AccountController extends Controller
 {
     //
-    protected $userService;
+    protected $accountService;
     /**
      * Class constructor.
      */
-    public function __construct(UserService $userService)
+    public function __construct(AccountService $accountService)
     {
-        $this->userService = $userService;
+        $this->accountService = $accountService;
     }
 
-    function getAllUser()
+    function getAllAccount()
     {
-        return response()->json($this->userService->getAllUser(), 200);
+        return response()->json($this->accountService->getAllAccount(), 200);
     }
 
     
 
-    function createUser(Request $request) {
+    function createAccount(Request $request) {
         $rules = [
-            'user_name' => 'required|max:200|unique:users,user_name',
+            'user_name' => 'required|max:200|unique:accounts,user_name',
             'name' => 'required|max:200',
             'password' => 'required',
             'roll' => 'required'
@@ -48,7 +52,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-        $result = $this->userService->createUser($request->all());
+        $result = $this->accountService->createAccount($request->all());
         if($result){
             return response()->json(["message" => "Thêm tài khoản thành công"], 200);
         }   else {
@@ -57,9 +61,9 @@ class UserController extends Controller
         
     }
 
-    function updateUser(Request $request, $id) {
+    function updateAccount(Request $request, $id) {
         $rules = [
-            'user_name' => 'required|max:200|unique:users,user_name',
+            'user_name' => 'required|max:200|unique:accounts,user_name',
             'name' => 'required|max:200',
             'password' => 'required',
             'roll' => 'required'
@@ -81,7 +85,14 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-        $result = $this->userService->updateUser($request->all(), $id);
+        
+        $newData = [
+            "user_name" => $request->user_name,
+            "name" => $request->name,
+            "roll" => $request->roll,
+            "password" => Hash::make($request->password),
+        ];
+        $result = $this->accountService->updateAccount($newData, $id);
         if($result){
             return response()->json(["message" => "Cập nhật tài khoản thành công"], 200);
         }   else {
@@ -90,8 +101,8 @@ class UserController extends Controller
         
     }
 
-    function deleteUser($id) {
-        $result = $this->userService->deleteUser($id);
+    function deleteAccount($id) {
+        $result = $this->accountService->deleteAccount($id);
         if($result){
             return response()->json(["message" => "Xóa tài khoản thành công"], 200);
         }   else {
@@ -100,8 +111,8 @@ class UserController extends Controller
         
     } 
     
-    function searchUser(Request $request) {
-        $result = $this->userService->searchUserByUserName($request->input('user_name'));
+    function searchAccount(Request $request) {
+        $result = $this->accountService->searchAccountByAccountName($request->input('user_name'));
         return response()->json($result, 200);
     }
 

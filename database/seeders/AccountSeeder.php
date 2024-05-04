@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Account;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 
-class UserSeeder extends Seeder
+class AccountSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,7 +15,7 @@ class UserSeeder extends Seeder
     {
         $faker = Faker::create();
         for ($i=0; $i < 15; $i++) { 
-            User::create([
+            Account::create([
                 'user_name'=>$faker->userName(),
                 'password'=>$faker->password(),
                 'name'=>$faker->name(),
