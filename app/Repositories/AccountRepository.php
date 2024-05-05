@@ -13,6 +13,15 @@ class AccountRepository extends BaseRepository
         return Account::class;
     }
 
+    public function findByUsername($username) {
+        $result = $this->model->where('user_name', $username)->first();
+        if($result){
+            return $result;
+        }
+        return false;
+    }
+    
+
     
 
 }

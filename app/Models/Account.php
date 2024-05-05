@@ -14,6 +14,6 @@ class Account extends Model
         'user_name',
         'password',
         'name',
-        'roll'
+        'roll',
     ];
 }
