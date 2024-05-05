@@ -95,7 +95,7 @@ class AccountController extends Controller
 
     function updateAccount(Request $request, $id) {
         $rules = [
-            'user_name' => 'required|max:200|unique:accounts,user_name',
+            'user_name' => 'required|max:200',
             'name' => 'required|max:200',
             'password' => 'required',
             'roll' => 'required'
@@ -103,7 +103,6 @@ class AccountController extends Controller
         $messages = [
             'user_name.required' => 'Tên người dùng là bắt buộc.',
             'user_name.max'      => 'Tên người dùng không được vượt quá 200 ký tự.',
-            'user_name.unique'   => 'Tên người dùng đã được sử dụng.',
         
             'name.required' => 'Trường tên là bắt buộc.',
             'name.max'      => 'Trường tên không được vượt quá 200 ký tự.',

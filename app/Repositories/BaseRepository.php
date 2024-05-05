@@ -41,7 +41,7 @@ abstract class BaseRepository implements RepositoryInterface{
         if($result){
             return $result;
         }
-        return $result;
+        return false;
     }
 
     function show($id){

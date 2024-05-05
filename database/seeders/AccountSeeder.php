@@ -5,8 +5,6 @@ namespace Database\Seeders;
 use App\Models\Account;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class AccountSeeder extends Seeder
 {
