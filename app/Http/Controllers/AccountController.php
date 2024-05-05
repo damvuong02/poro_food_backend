@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;;
 
+use App\Models\Account;
 use App\Services\AccountService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Str;
 use function Pest\Laravel\json;
 
 class AccountController extends Controller
@@ -22,11 +24,41 @@ class AccountController extends Controller
     }
 
     function getAllAccount()
-    {
+    {   
         return response()->json($this->accountService->getAllAccount(), 200);
     }
 
-    
+    function login(Request $request)
+    {
+        $rules = [
+            'user_name' => 'required',
+            'password' => 'required',
+        ];
+        $messages = [
+            'user_name.required' => 'Tên người dùng là bắt buộc.',
+            'password.required' => 'Trường mật khẩu là bắt buộc.',
+        ];
+        
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return response()->json(["errors" => $errors], 422);
+        } else {
+            $user_name = $request->user_name;
+            $password = $request->password;
+            
+            $account =  $this->accountService->login($user_name, $password);
+            if ($account == false) {
+                return response()->json(["message" => "Tài khoản hoặc mật khẩu không chính xác", 'account' => null,], 422);
+            }
+            else{
+                return response()->json([
+                    'message'=>"Đăng nhập thành công",
+                    'account' => $account,
+                ], 200);
+            }
+        }
+    }
 
     function createAccount(Request $request) {
         $rules = [
@@ -90,7 +122,7 @@ class AccountController extends Controller
             "user_name" => $request->user_name,
             "name" => $request->name,
             "roll" => $request->roll,
-            "password" => Hash::make($request->password),
+            "password" => $request->password,
         ];
         $result = $this->accountService->updateAccount($newData, $id);
         if($result){
@@ -114,6 +146,30 @@ class AccountController extends Controller
     function searchAccount(Request $request) {
         $result = $this->accountService->searchAccountByAccountName($request->input('user_name'));
         return response()->json($result, 200);
+    }
+    
+    function finById(Request $request)
+    {   
+        $result = $this->accountService->findById($request->input('id'));
+        return response()->json($result, 200);
+    }
+
+    function changePassword(Request $request){
+        $result = $this->accountService->changePassword($request->input("id"), $request->input("password"), $request->input("new_password"));
+        if($result == true){
+            return response()->json(["message" => "Đổi mật khẩu thành công"], 200);
+        }else{
+            return response()->json(["message" => "Đổi mật khẩu thất bại"], 500);
+        }
+    }
+
+    function checkPassword(Request $request){
+        $result = $this->accountService->checkPassword($request->input("id"), $request->input("password"));
+        if($result == true){
+            return response()->json(["message" => "Mật khẩu chính xác"], 200);
+        }else{
+            return response()->json(["message" => "Mật khẩu không chính xác"], 401);
+        }
     }
 
 }

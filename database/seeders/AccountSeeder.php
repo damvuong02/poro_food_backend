@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Account;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AccountSeeder extends Seeder
 {
@@ -19,7 +21,7 @@ class AccountSeeder extends Seeder
                 'user_name'=>$faker->userName(),
                 'password'=>$faker->password(),
                 'name'=>$faker->name(),
-                'roll'=>$faker->randomElement(['Đầu bếp', 'Quản lý', 'Thu ngân', 'Phục vụ'])
+                'roll'=>$faker->randomElement(['Đầu bếp', 'Quản lý', 'Thu ngân', 'Phục vụ']),
             ]);
         }
     }

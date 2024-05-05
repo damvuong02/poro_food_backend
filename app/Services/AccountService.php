@@ -15,7 +15,7 @@ class AccountService{
     {
         $this->accountRepo = $accountRepository;
     }
-
+    
     
     function getAllAccount(){
         return $this->accountRepo->getAll();
@@ -37,4 +37,43 @@ class AccountService{
         return $this->accountRepo->search('user_name', $name);
     }
 
+    function findById($id){
+        return $this->accountRepo->findById($id);
+    }
+
+    function changePassword($id, $oldPassword, $newPassword){
+        $account = $this->accountRepo->findById($id);
+        if($account == false){
+            return false;
+        }else{
+            if($account->password == $oldPassword ){
+                $account->update(["password" => $newPassword]);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    function checkPassword($id, $oldPassword){
+        $account = $this->accountRepo->findById($id);
+        if($account == false){
+            return false;
+        }else{
+            if($account->password == $oldPassword ){
+                return true;
+            }
+            return false;
+        }
+    }
+
+    function login($user_name, $password){
+        $account = $this->accountRepo->findByUsername($user_name);
+        if($account){
+            if($account->password == $password){
+                return $account;
+            }
+            return false;
+        }
+        return false;
+    }
 }
