@@ -44,7 +44,8 @@ class TableController extends Controller
         }
         $result = $this->tableService->createTable($request->all());
         if($result){
-            return response()->json(["message" => "Thêm bàn thành công"], 200);
+            return response()->json(["message" => "Thêm bàn thành công",
+            "data" => $result], 200);
         }   else {
             return response()->json(["message" => "Thêm bàn thất bại"], 500);
         }
@@ -75,7 +76,8 @@ class TableController extends Controller
         ];
         $result = $this->tableService->updateTable($newData, $id);
         if($result){
-            return response()->json(["message" => "Cập nhật bàn thành công"], 200);
+            return response()->json(["message" => "Cập nhật bàn thành công", 
+            "data" => $result], 200);
         }   else {
             return response()->json(["message" => "Cập nhật bàn thất bại"], 500);
         }

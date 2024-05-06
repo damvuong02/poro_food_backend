@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\TableController;
+use App\Http\Controllers\CategoryController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +30,12 @@ Route::get('/table/search-table',[TableController::class, 'searchTable']);
 Route::get('/table/find-table',[TableController::class, 'finById']);
 Route::get('/table/find-table-status',[TableController::class, 'findTableByStatus']);
 
+//category section
+Route::get('/category/all-category',[CategoryController::class, 'getAllCategory']);
+Route::post('/category/create-category',[CategoryController::class, 'createCategory']);
+Route::post('/category/update-category/{id}',[CategoryController::class, 'updateCategory']);
+Route::post('/category/delete-category/{id}',[CategoryController::class, 'deleteCategory']);
+Route::get('/category/find-category',[CategoryController::class, 'finById']);
 
 
 
