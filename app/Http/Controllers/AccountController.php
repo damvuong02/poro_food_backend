@@ -86,7 +86,7 @@ class AccountController extends Controller
         }
         $result = $this->accountService->createAccount($request->all());
         if($result){
-            return response()->json(["message" => "Thêm tài khoản thành công"], 200);
+            return response()->json(["message" => "Thêm tài khoản thành công", "data" => $result], 200);
         }   else {
             return response()->json(["message" => "Thêm tài khoản thất bại"], 500);
         }
@@ -125,7 +125,7 @@ class AccountController extends Controller
         ];
         $result = $this->accountService->updateAccount($newData, $id);
         if($result){
-            return response()->json(["message" => "Cập nhật tài khoản thành công"], 200);
+            return response()->json(["message" => "Cập nhật tài khoản thành công", "data" => $result], 200);
         }   else {
             return response()->json(["message" => "Cập nhật tài khoản thất bại"], 500);
         }
