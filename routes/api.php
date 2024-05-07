@@ -3,8 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\CategoryController;
-
-
+use App\Http\Controllers\FoodController;
 use Illuminate\Support\Facades\Route;
 
 //login
@@ -37,6 +36,13 @@ Route::post('/category/update-category/{id}',[CategoryController::class, 'update
 Route::post('/category/delete-category/{id}',[CategoryController::class, 'deleteCategory']);
 Route::get('/category/find-category',[CategoryController::class, 'finById']);
 
+//food section
+Route::get('/food/all-food',[FoodController::class, 'getAllFood']);
+Route::post('/food/create-food',[FoodController::class, 'createFood']);
+Route::post('/food/update-food/{id}',[FoodController::class, 'updateFood']);
+Route::post('/food/delete-food/{id}',[FoodController::class, 'deleteFood']);
+Route::get('/food/find-food',[FoodController::class, 'finById']);
+Route::get('/food/search-food',[FoodController::class, 'searchFood']);
 
 
 
