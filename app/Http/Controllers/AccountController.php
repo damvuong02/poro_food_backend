@@ -42,7 +42,7 @@ class AccountController extends Controller
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
             $errors = $validator->errors();
-            return response()->json(["errors" => $errors], 422);
+            return response()->json(["message" => $errors], 422);
         } else {
             $user_name = $request->user_name;
             $password = $request->password;
@@ -82,7 +82,7 @@ class AccountController extends Controller
         
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json(['message' => $validator->errors()], 422);
         }
         $result = $this->accountService->createAccount($request->all());
         if($result){
@@ -114,7 +114,7 @@ class AccountController extends Controller
         
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json(['message' => $validator->errors()], 422);
         }
         
         $newData = [

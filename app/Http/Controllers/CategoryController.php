@@ -38,7 +38,7 @@ class CategoryController extends Controller
         
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json(['message' => $validator->errors()], 422);
         }
         $result = $this->categoryService->createCategory($request->all());
         if($result){
@@ -63,7 +63,7 @@ class CategoryController extends Controller
         
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json(['message' => $validator->errors()], 422);
         }
         
         $newData = [

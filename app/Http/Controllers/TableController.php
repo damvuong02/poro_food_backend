@@ -40,7 +40,7 @@ class TableController extends Controller
         
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json(['message' => $validator->errors()], 422);
         }
         $result = $this->tableService->createTable($request->all());
         if($result){
@@ -67,7 +67,7 @@ class TableController extends Controller
         
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json(['message' => $validator->errors()], 422);
         }
         
         $newData = [
