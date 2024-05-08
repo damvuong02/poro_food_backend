@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('foods', function (Blueprint $table) {
             $table->id();
             $table->string('food_name')->unique();
-            $table->integer('category_id');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->integer('price');
             $table->integer('quantity');
             $table->string('food_image')->nullable();
