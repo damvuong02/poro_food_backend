@@ -15,6 +15,24 @@ class FoodRepository extends BaseRepository
     public function getAll(){
         return $this->model->latest()->get()->load('category');
     }
+
+    public function create($data = []){
+        $result = $this->model->create($data);
+        if($result){
+            return $result->load('category');
+        }
+        return false;
+    }
+
+    function update($data = [],$id){
+        $result = $this->model->find($id);
+        if($result){
+            $result->update($data);
+            return $result->load('category');
+        }
+        return false;
+    }
+
     public function searchFood(string $value)
     {
         $result = $this->model->where('food_name','like','%'.$value.'%')->with('category')->paginate(10000);
