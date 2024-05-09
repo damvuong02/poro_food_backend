@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('foods', function (Blueprint $table) {
             $table->id();
-            $table->string('food_name')->unique();
+            $table->string('food_name');
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->integer('price');
