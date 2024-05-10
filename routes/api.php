@@ -35,6 +35,7 @@ Route::post('/category/create-category',[CategoryController::class, 'createCateg
 Route::post('/category/update-category/{id}',[CategoryController::class, 'updateCategory']);
 Route::post('/category/delete-category/{id}',[CategoryController::class, 'deleteCategory']);
 Route::get('/category/find-category',[CategoryController::class, 'finById']);
+Route::get('/category/food-category',[CategoryController::class, 'getFoodByCategory']);
 
 //food section
 Route::get('/food/all-food',[FoodController::class, 'getAllFood']);

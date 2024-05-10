@@ -12,5 +12,14 @@ class CategoryRepository extends BaseRepository
     {
         return Category::class;
     }
+
+    public function getFoodByCategory($id){
+        $result = $this->model->find($id);
+        if(!$result){
+            return [];
+        }
+        
+        return $result->foods->load('category');
+    }
     
 }

@@ -35,4 +35,8 @@ class CategoryService{
     function findById($id){
         return $this->categoryRepo->findById($id);
     }
+
+    function getFoodByCategory($id){
+        return $this->categoryRepo->getFoodByCategory($id);
+    }
 }

@@ -24,6 +24,11 @@ class CategoryController extends Controller
         return response()->json($this->categoryService->getAllCategory(), 200);
     }
 
+    function getFoodByCategory(Request $request)
+    {   
+        return response()->json($this->categoryService->getFoodByCategory($request->input('id')), 200);
+    }
+
     
     function createCategory(Request $request) {
         $rules = [
