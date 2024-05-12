@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->string('food_image')->nullable();
             $table->string('food_unit')->nullable();
+            $table->integer('quantity_sold')->default(0);
             $table->timestamps();
         });
     }

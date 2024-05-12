@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\BillDetailController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FoodController;
@@ -44,7 +45,6 @@ Route::post('/food/update-food/{id}',[FoodController::class, 'updateFood']);
 Route::post('/food/delete-food/{id}',[FoodController::class, 'deleteFood']);
 Route::get('/food/find-food',[FoodController::class, 'finById']);
 Route::get('/food/search-food',[FoodController::class, 'searchFood']);
-
 
 
 

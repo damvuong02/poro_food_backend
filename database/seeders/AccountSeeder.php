@@ -19,7 +19,7 @@ class AccountSeeder extends Seeder
                 'user_name'=>$faker->userName(),
                 'password'=>$faker->password(),
                 'name'=>$faker->name(),
-                'roll'=>$faker->randomElement(['Đầu bếp', 'Quản lý', 'Thu ngân', 'Phục vụ']),
+                'role'=>$faker->randomElement(['Đầu bếp', 'Quản lý', 'Thu ngân', 'Phục vụ']),
             ]);
         }
     }

@@ -102,6 +102,17 @@ class FoodController extends Controller
         
     }
 
+    function updateSoldQuantity($quantity, $id) {
+
+        $result = $this->foodService->updateSoldQuantity($quantity, $id);
+        if($result){
+            return true;
+        }   else {
+            return false;
+        }
+        
+    }
+
     function deleteFood($id) {
         $result = $this->foodService->deleteFood($id);
         if($result){

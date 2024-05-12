@@ -28,6 +28,10 @@ class FoodService{
         return $this->foodRepo->update($data, $id);
     }
 
+    function updateSoldQuantity($sold_quantity, $id){
+        return $this->foodRepo->updateSoldQuantity($sold_quantity, $id);
+    }
+
     function deleteFood($id){
         return $this->foodRepo->delete($id);
     }

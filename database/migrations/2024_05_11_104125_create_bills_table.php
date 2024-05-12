@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('bills', function (Blueprint $table) {
             $table->id();
-            $table->string('user_name')->unique();
-            $table->string('password');
-            $table->string('name');  
-            $table->enum('role',['Đầu bếp', 'Quản lý', 'Thu ngân', 'Phục vụ', 'Chủ nhà hàng']);
+            $table->unsignedBigInteger('account_id');
+            $table->foreign('account_id')->references('id')->on('accounts');
+            $table->text('bill_detail');
             $table->timestamps();
         });
-    
     }
 
     /**
@@ -27,7 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('accounts');
-        
+        Schema::dropIfExists('bills');
     }
 };

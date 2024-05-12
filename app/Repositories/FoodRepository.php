@@ -33,6 +33,15 @@ class FoodRepository extends BaseRepository
         return false;
     }
 
+    function updateSoldQuantity($quantity,$id){
+        $result = $this->model->find($id);
+        if($result){
+            $result->update($result->quantity_sold + $quantity);
+            return true;
+        }
+        return false;
+    }
+
     public function searchFood(string $value)
     {
         $result = $this->model->where('food_name','like','%'.$value.'%')->with('category')->paginate(10000);

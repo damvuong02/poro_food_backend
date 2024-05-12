@@ -14,6 +14,10 @@ class Account extends Model
         'user_name',
         'password',
         'name',
-        'roll',
+        'role',
     ];
+
+    public function bills() {
+        return $this->hasMany(Bill::class);
+    }
 }

@@ -17,11 +17,16 @@ class Food extends Model
         'quantity',
         'food_image',
         'food_unit',
+        'quantity_sold',
+
     ];
 
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+    public function orders() {
+        return $this->hasMany(Order::class);
     }
     
 }
