@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedInteger('price');
             $table->string('table_name',255);
             $table->enum('order_status', ['New', 'Cooking', 'Done']);
-            $table->string('note',50);
+            $table->string('note',50)->nullable();
             $table->timestamps();
         });
     }

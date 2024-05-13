@@ -14,8 +14,9 @@ class Bill extends Model
     protected $fillable = [
         'account_id',
         'bill_detail',
+        'table_name',
     ];
-    public function acount() {
+    public function account() {
         return $this->BelongsTo(Account::class);
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\BillDetailController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 //login
@@ -46,8 +47,10 @@ Route::post('/food/delete-food/{id}',[FoodController::class, 'deleteFood']);
 Route::get('/food/find-food',[FoodController::class, 'finById']);
 Route::get('/food/search-food',[FoodController::class, 'searchFood']);
 
-
-
-
+//order section
+Route::get('/order/getOrder',[OrderController::class,'getOrderByTableAndStatus']);
+Route::post('/order/create-order',[OrderController::class, 'createOrder']);
+Route::post('/order/update-order/{id}',[OrderController::class, 'updateOrder']);
+Route::post('/order/delete-order/{id}',[OrderController::class, 'deleteOrder']);
 
 
