@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\BillDetailController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\CategoryController;
@@ -48,9 +49,14 @@ Route::get('/food/find-food',[FoodController::class, 'finById']);
 Route::get('/food/search-food',[FoodController::class, 'searchFood']);
 
 //order section
-Route::get('/order/getOrder',[OrderController::class,'getOrderByTableAndStatus']);
+Route::get('/order/get-order',[OrderController::class,'getOrderByTableAndStatus']);
 Route::post('/order/create-order',[OrderController::class, 'createOrder']);
 Route::post('/order/update-order/{id}',[OrderController::class, 'updateOrder']);
 Route::post('/order/delete-order/{id}',[OrderController::class, 'deleteOrder']);
 
-
+//bill section
+Route::get('/bill/all-bill',[BillController::class,'getAllBill']);
+Route::post('/bill/create-bill',[BillController::class, 'createBill']);
+Route::post('/bill/update-bill/{id}',[BillController::class, 'updateBill']);
+Route::post('/bill/delete-bill/{id}',[BillController::class, 'deleteBill']);
+Route::get('/bill/find-bill',[BillController::class, 'finById']);
