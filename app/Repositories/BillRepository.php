@@ -18,6 +18,8 @@ class BillRepository extends BaseRepository
 
     public function create($data = []){
         $result = $this->model->create($data);
+        $result->created_at = $data["created_at"];
+        $result->save();
         if($result){
             return $result->load('account');
         }
@@ -28,6 +30,8 @@ class BillRepository extends BaseRepository
         $result = $this->model->find($id);
         if($result){
             $result->update($data);
+            $result->created_at = $data["created_at"];
+            $result->save();
             return $result->load('account');
         }
         return false;

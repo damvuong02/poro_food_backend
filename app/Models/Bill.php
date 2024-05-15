@@ -15,6 +15,7 @@ class Bill extends Model
         'account_id',
         'bill_detail',
         'table_name',
+        'created_at'
     ];
     public function account() {
         return $this->BelongsTo(Account::class);

@@ -29,10 +29,13 @@ class BillController extends Controller
         $rules = [
             'table_name' => 'required',
             'bill_detail' => 'required',
+            'created_at' => 'required',
         ];
         $messages = [
             'table_name.required' => 'Tên bàn là bắt buộc.',
             'bill_detail.required'   => 'Chi tiết hóa đơn là bắt buộc.',
+            'created_at.required'   => 'Ngày tạo hóa đơn là bắt buộc.',
+
         ];
         
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -54,10 +57,13 @@ class BillController extends Controller
         $rules = [
             'table_name' => 'required',
             'bill_detail' => 'required',
+            'created_at' => 'required',
         ];
         $messages = [
             'table_name.required' => 'Tên bàn là bắt buộc.',
             'bill_detail.required'   => 'Chi tiết hóa đơn là bắt buộc.',
+            'created_at.required'   => 'Ngày tạo hóa đơn là bắt buộc.',
+
         ];
         
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -69,6 +75,7 @@ class BillController extends Controller
             "table_name" => $request->table_name,
             "bill_detail" => $request->bill_detail,
             "account_id" => $request->account_id,
+            "created_at" => $request->created_at,
         ];
         $result = $this->billService->updateBill($newData, $id);
         if($result){
