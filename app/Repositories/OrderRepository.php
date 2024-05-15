@@ -13,7 +13,7 @@ class OrderRepository extends BaseRepository
         return Order::class;
     }
     public function getOrderByTableAndStatus($table_name, $status){
-        return $this->model->where('table_name', $table_name)->where('order_status', $status)->with('food')->get();
+        return $this->model->where('table_name', $table_name)->where('order_status', $status)->with('food.category')->get();
     }
  
 }
