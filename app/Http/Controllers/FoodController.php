@@ -124,7 +124,7 @@ class FoodController extends Controller
     } 
     
     function searchFood(Request $request) {
-        $result = $this->foodService->searchFood($request->input('food_name'));
+        $result = $this->foodService->searchFood($request->input('food_name'), $request->input('category_id'));
         return response()->json($result, 200);
     }
     

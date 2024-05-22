@@ -42,10 +42,16 @@ class FoodRepository extends BaseRepository
         return false;
     }
 
-    public function searchFood(string $value)
-    {
-        $result = $this->model->where('food_name','like','%'.$value.'%')->with('category')->paginate(10000);
-        return $result;
+    public function searchFood(string $value, int $category_id)
+    {   
+        if($category_id == null){
+
+            $result = $this->model->where('food_name','like','%'.$value.'%')->with('category')->paginate(10000);
+            return $result;
+        }else{
+            $result = $this->model->where('food_name','like','%'.$value.'%')->where('category_id', $category_id)->with('category')->paginate(10000);
+            return $result;
+        }
     }
     
 }

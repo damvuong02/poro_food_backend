@@ -40,7 +40,7 @@ class FoodService{
         return $this->foodRepo->findById($id);
     }
 
-    function searchFood($foodName){
-        return $this->foodRepo->searchFood($foodName);
+    function searchFood($foodName, $category_id){
+        return $this->foodRepo->searchFood($foodName, $category_id);
     }
 }
