@@ -49,10 +49,14 @@ Route::get('/food/find-food',[FoodController::class, 'finById']);
 Route::get('/food/search-food',[FoodController::class, 'searchFood']);
 
 //order section
-Route::get('/order/get-order',[OrderController::class,'getOrderByTableAndStatus']);
+Route::get('/order/get-order-by-table-status',[OrderController::class,'getOrderByTableAndStatus']);
 Route::post('/order/create-order',[OrderController::class, 'createOrder']);
 Route::post('/order/update-order/{id}',[OrderController::class, 'updateOrder']);
 Route::post('/order/delete-order/{id}',[OrderController::class, 'deleteOrder']);
+Route::post('/order/delete-order-by-table',[OrderController::class, 'deleteOrderByTableName']);
+Route::get('/order/get-order-by-table',[OrderController::class, 'getOrderByTable']);
+
+
 
 //bill section
 Route::get('/bill/all-bill',[BillController::class,'getAllBill']);

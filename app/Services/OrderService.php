@@ -20,6 +20,14 @@ class OrderService{
         return false;
     }
 
+    public function getOrderByTable($table_name) {
+        if(!empty($table_name))
+        {
+            return $this->orderRepo->getOrderByTable($table_name);
+        }
+        return false;
+    }
+
     function createOrder($data){
         return $this->orderRepo->create($data);
     }
@@ -30,6 +38,10 @@ class OrderService{
 
     function deleteOrder($id){
         return $this->orderRepo->delete($id);
+    }
+
+    function deleteOrderByTable($table_name){
+        return $this->orderRepo->deleteOrderByTable($table_name);
     }
 }
 ?>
