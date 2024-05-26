@@ -27,6 +27,15 @@ class OrderController extends Controller
         return response()->json(["message" => "Đơn đặt hàng không tồn tại"], 500);
     }
 
+    public function getOrderByTable(Request $request) {
+        $table_name = $request->table_name;
+        $result = $this->orderService->getOrderByTable($table_name);
+        if($result){
+            return response()->json($result);
+        }
+        return response()->json(["message" => "Đơn đặt hàng không tồn tại"], 500);
+    }
+
     function createOrder(Request $request) {
         $rules = [
             'food_id' => 'required',
@@ -96,6 +105,16 @@ class OrderController extends Controller
 
     function deleteOrder($id) {
         $result = $this->orderService->deleteOrder($id);
+        if($result){
+            return response()->json(["message" => "Xóa đơn đặt món thành công"], 200);
+        }   else {
+            return response()->json(["message" => "Xóa đơn đặt món thất bại"], 500);
+        }
+        
+    } 
+    function deleteOrderByTableName(Request $request) {
+        $table_name = $request->table_name;
+        $result = $this->orderService->deleteOrderByTable($table_name);
         if($result){
             return response()->json(["message" => "Xóa đơn đặt món thành công"], 200);
         }   else {
