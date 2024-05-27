@@ -102,5 +102,11 @@ class BillController extends Controller
         $result = $this->billService->findById($request->input('id'));
         return response()->json($result, 200);
     }
+
+    function getBillsToday()
+    {   
+        $result = $this->billService->getBillsToday();
+        return response()->json($result, 200);
+    }
     
 }

@@ -17,6 +17,12 @@ class OrderController extends Controller
     {
         $this->orderService = $orderService;
     }
+
+    function getAllOrder()
+    {   
+        return response()->json($this->orderService->getAllOrder(), 200);
+    }
+
     public function getOrderByTableAndStatus(Request $request) {
         $table_name = $request->table_name;
         $order_status = $request->order_status;        

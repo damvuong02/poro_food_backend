@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Bill;
 use App\Repositories\BaseRepository;
+use Carbon\Carbon;
 
 class BillRepository extends BaseRepository
 {
@@ -35,5 +36,14 @@ class BillRepository extends BaseRepository
             return $result->load('account');
         }
         return false;
+    }
+
+    public function getBillsToday()
+    {
+        $today = Carbon::today();
+
+        $billsToday = Bill::whereDate('created_at', $today)->get();
+        
+        return $billsToday;
     }
 }
