@@ -35,4 +35,7 @@ class BillService{
         return $this->billRepo->findById($id);
     }
 
+    function getBillsToday(){
+        return $this->billRepo->getBillsToday();
+    }
 }

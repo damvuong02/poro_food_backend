@@ -12,6 +12,11 @@ class OrderRepository extends BaseRepository
     {
         return Order::class;
     }
+
+    public function getAllOrder(){
+        return $this->model->with('food.category')->get();
+    }
+
     public function getOrderByTableAndStatus($table_name, $status){
         return $this->model->where('table_name', $table_name)->where('order_status', $status)->with('food.category')->get();
     }
@@ -23,4 +28,15 @@ class OrderRepository extends BaseRepository
     public function deleteOrderByTable($table_name) {
         return $this->model->where('table_name', $table_name)->delete();
     }
+
+    public function create($data = []){
+        $result = $this->model->create($data);
+        if($result){
+            $result->refresh();
+            $result->load('food.category');
+            return $result;
+        }
+        return false;
+    }
+
 }

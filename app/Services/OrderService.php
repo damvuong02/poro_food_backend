@@ -12,6 +12,11 @@ class OrderService{
     {
         $this->orderRepo = $orderRepo;
     }
+
+    function getAllOrder(){
+        return $this->orderRepo->getAllOrder();
+    }
+
     public function getOrderByTableAndStatus($table_name, $status) {
         if(!empty($table_name)&&!empty($status))
         {

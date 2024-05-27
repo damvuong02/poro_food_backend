@@ -55,6 +55,8 @@ Route::post('/order/update-order/{id}',[OrderController::class, 'updateOrder']);
 Route::post('/order/delete-order/{id}',[OrderController::class, 'deleteOrder']);
 Route::post('/order/delete-order-by-table',[OrderController::class, 'deleteOrderByTableName']);
 Route::get('/order/get-order-by-table',[OrderController::class, 'getOrderByTable']);
+Route::get('/order/all-order',[OrderController::class, 'getAllOrder']);
+
 
 
 
@@ -64,3 +66,5 @@ Route::post('/bill/create-bill',[BillController::class, 'createBill']);
 Route::post('/bill/update-bill/{id}',[BillController::class, 'updateBill']);
 Route::post('/bill/delete-bill/{id}',[BillController::class, 'deleteBill']);
 Route::get('/bill/find-bill',[BillController::class, 'finById']);
+Route::get('/bill/bill-today',[BillController::class, 'getBillsToday']);
+
