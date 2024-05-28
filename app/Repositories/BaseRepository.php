@@ -1,8 +1,6 @@
 <?php
 namespace App\Repositories;
 
-use Spatie\FlareClient\Flare;
-
 abstract class BaseRepository implements RepositoryInterface{
     //model muốn tương tác
     protected $model;

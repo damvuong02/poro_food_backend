@@ -67,4 +67,8 @@ Route::post('/bill/update-bill/{id}',[BillController::class, 'updateBill']);
 Route::post('/bill/delete-bill/{id}',[BillController::class, 'deleteBill']);
 Route::get('/bill/find-bill',[BillController::class, 'finById']);
 Route::get('/bill/bill-today',[BillController::class, 'getBillsToday']);
+Route::get('/bill/weekly-revenue',[BillController::class, 'getRevenueByDayInWeek']);
+Route::get('/bill/monthly-revenue',[BillController::class, 'getRevenueByMonthInYear']);
+
+
 

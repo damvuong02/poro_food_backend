@@ -38,4 +38,13 @@ class BillService{
     function getBillsToday(){
         return $this->billRepo->getBillsToday();
     }
+
+    function getRevenueByDayInWeek(){
+        return $this->billRepo->getRevenueByDayInWeek();
+    }
+
+    function getRevenueByMonthInYear(){
+        return $this->billRepo->getRevenueByMonthInYear();
+    }
+    
 }
