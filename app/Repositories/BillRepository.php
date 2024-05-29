@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Bill;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class BillRepository extends BaseRepository
 {
@@ -121,4 +122,42 @@ class BillRepository extends BaseRepository
     
         return $billByDay;
     }
+
+    public function getRevenueByYear()
+{
+    // Lấy tất cả các hóa đơn từ cơ sở dữ liệu
+    $bills = Bill::all();
+    
+    // Nhóm các hóa đơn theo năm dựa vào cột `created_at`
+    $billsByYear = $bills->groupBy(function($bill) {
+        return \Carbon\Carbon::parse($bill->created_at)->year;
+    });
+    
+    // Tính toán tổng doanh thu cho mỗi năm và tạo mảng chứa doanh thu theo năm
+    $revenueByYear = $billsByYear->mapWithKeys(function ($bills, $year) {
+        $totalRevenue = 0; // Khởi tạo tổng doanh thu cho năm hiện tại là 0
+
+        // Duyệt qua từng hóa đơn trong nhóm năm hiện tại
+        foreach ($bills as $bill) {
+            // Giải mã JSON trong trường `bill_detail` thành mảng
+            $billDetails = json_decode($bill->bill_detail, true);
+
+            // Duyệt qua từng mục chi tiết hóa đơn
+            foreach ($billDetails as $detail) {
+                // Tính doanh thu của từng mục (giá * số lượng) và cộng vào tổng doanh thu
+                $totalRevenue += $detail['food']['price'] * $detail['quantity'];
+            }
+        }
+
+        // Trả về một mảng có khóa là năm và giá trị là tổng doanh thu của năm đó
+        return [$year => $totalRevenue];
+    });
+
+    // Chuyển đổi kết quả thành mảng (nếu cần thiết)
+    $revenueByYearArray = $revenueByYear->toArray();
+
+    // Trả về mảng doanh thu theo năm
+    return $revenueByYearArray;
+}
+
 }

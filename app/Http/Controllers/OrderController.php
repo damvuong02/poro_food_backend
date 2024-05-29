@@ -42,6 +42,15 @@ class OrderController extends Controller
         return response()->json(["message" => "Đơn đặt hàng không tồn tại"], 500);
     }
 
+    public function getOrderByStatus(Request $request) {
+        $order_status = $request->order_status;
+        $result = $this->orderService->getOrderByStatus($order_status);
+        if($result){
+            return response()->json($result);
+        }
+        return response()->json(["message" => "Đơn đặt hàng không tồn tại"], 500);
+    }
+
     function createOrder(Request $request) {
         $rules = [
             'food_id' => 'required',

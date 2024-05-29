@@ -43,4 +43,9 @@ class FoodService{
     function searchFood($foodName, $category_id){
         return $this->foodRepo->searchFood($foodName, $category_id);
     }
+
+    function getTopFoodQuantitySold(){
+        return $this->foodRepo->getTopFoodQuantitySold();
+    }
+    
 }

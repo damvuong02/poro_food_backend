@@ -121,6 +121,10 @@ class BillController extends Controller
         return response()->json($result, 200);
     }
 
-    
+    function getRevenueByYear()
+    {   
+        $result = $this->billService->getRevenueByYear();
+        return response()->json($result, 200);
+    }
     
 }

@@ -46,5 +46,9 @@ class BillService{
     function getRevenueByMonthInYear(){
         return $this->billRepo->getRevenueByMonthInYear();
     }
+
+    function getRevenueByYear(){
+        return $this->billRepo->getRevenueByYear();
+    }
     
 }

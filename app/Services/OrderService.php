@@ -33,6 +33,14 @@ class OrderService{
         return false;
     }
 
+    public function getOrderByStatus($order_status) {
+        if(!empty($order_status))
+        {
+            return $this->orderRepo->getOrderByStatus($order_status);
+        }
+        return false;
+    }
+
     function createOrder($data){
         return $this->orderRepo->create($data);
     }

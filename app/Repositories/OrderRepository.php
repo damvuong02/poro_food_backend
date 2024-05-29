@@ -24,6 +24,10 @@ class OrderRepository extends BaseRepository
     public function getOrderByTable($table_name){
         return $this->model->where('table_name', $table_name)->with('food.category')->get();
     }
+
+    public function getOrderByStatus($order_status){
+        return $this->model->where('order_status', $order_status)->with('food.category')->get();
+    }
     
     public function deleteOrderByTable($table_name) {
         return $this->model->where('table_name', $table_name)->delete();

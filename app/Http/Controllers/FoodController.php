@@ -133,5 +133,10 @@ class FoodController extends Controller
         $result = $this->foodService->findById($request->input('id'));
         return response()->json($result, 200);
     }
+
+    function getTopFoodQuantitySold()
+    {   
+        return response()->json($this->foodService->getTopFoodQuantitySold(), 200);
+    }
     
 }

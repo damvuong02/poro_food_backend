@@ -54,4 +54,8 @@ class FoodRepository extends BaseRepository
         }
     }
     
+    public function getTopFoodQuantitySold(){
+        $topFoods = Food::orderByDesc('quantity_sold')->take(5)->get()->load('category');
+        return $topFoods;
+    }
 }
