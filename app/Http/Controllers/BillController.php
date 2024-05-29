@@ -108,5 +108,23 @@ class BillController extends Controller
         $result = $this->billService->getBillsToday();
         return response()->json($result, 200);
     }
+
+    function getRevenueByDayInWeek()
+    {   
+        $result = $this->billService->getRevenueByDayInWeek();
+        return response()->json($result, 200);
+    }
+
+    function getRevenueByMonthInYear()
+    {   
+        $result = $this->billService->getRevenueByMonthInYear();
+        return response()->json($result, 200);
+    }
+
+    function getRevenueByYear()
+    {   
+        $result = $this->billService->getRevenueByYear();
+        return response()->json($result, 200);
+    }
     
 }

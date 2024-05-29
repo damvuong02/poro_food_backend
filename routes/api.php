@@ -47,6 +47,8 @@ Route::post('/food/update-food/{id}',[FoodController::class, 'updateFood']);
 Route::post('/food/delete-food/{id}',[FoodController::class, 'deleteFood']);
 Route::get('/food/find-food',[FoodController::class, 'finById']);
 Route::get('/food/search-food',[FoodController::class, 'searchFood']);
+Route::get('/food/top-food',[FoodController::class, 'getTopFoodQuantitySold']);
+
 
 //order section
 Route::get('/order/get-order-by-table-status',[OrderController::class,'getOrderByTableAndStatus']);
@@ -56,6 +58,7 @@ Route::post('/order/delete-order/{id}',[OrderController::class, 'deleteOrder']);
 Route::post('/order/delete-order-by-table',[OrderController::class, 'deleteOrderByTableName']);
 Route::get('/order/get-order-by-table',[OrderController::class, 'getOrderByTable']);
 Route::get('/order/all-order',[OrderController::class, 'getAllOrder']);
+Route::get('/order/get-order-by-status',[OrderController::class, 'getOrderByStatus']);
 
 
 
@@ -67,4 +70,11 @@ Route::post('/bill/update-bill/{id}',[BillController::class, 'updateBill']);
 Route::post('/bill/delete-bill/{id}',[BillController::class, 'deleteBill']);
 Route::get('/bill/find-bill',[BillController::class, 'finById']);
 Route::get('/bill/bill-today',[BillController::class, 'getBillsToday']);
+Route::get('/bill/weekly-revenue',[BillController::class, 'getRevenueByDayInWeek']);
+Route::get('/bill/monthly-revenue',[BillController::class, 'getRevenueByMonthInYear']);
+Route::get('/bill/year-revenue',[BillController::class, 'getRevenueByYear']);
+
+
+
+
 
