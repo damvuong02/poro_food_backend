@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\CreateOrderJob;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -73,6 +74,7 @@ class OrderController extends Controller
         }
         $result = $this->orderService->createOrder($request->all());
         if($result){
+            CreateOrderJob::dispatch($result->load('food'));
             return response()->json(["message" => "Thêm đơn đặt món thành công",
             "data" => $result->load('food')], 200);
         }   else {
