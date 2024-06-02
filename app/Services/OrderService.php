@@ -5,12 +5,14 @@ use App\Repositories\OrderRepository;
 
 class OrderService{
     protected $orderRepo;
+    protected $foodSevice;
     /**
      * Class constructor.
      */
-    public function __construct(OrderRepository $orderRepo)
+    public function __construct(OrderRepository $orderRepo, FoodService $foodSevice)
     {
         $this->orderRepo = $orderRepo;
+        $this->foodSevice=$foodSevice;
     }
 
     function getAllOrder(){
@@ -42,6 +44,19 @@ class OrderService{
     }
 
     function createOrder($data){
+        
+        $create_err =[];
+        //Kiem tra so luong mon an co du khong
+        foreach ($data as $index => $value) {
+            $food = $this->foodSevice->findById(1);
+            if($value['quantity'] > $food->quantity){
+                $create_err[]=$value;
+                // Xóa phần tử khỏi mảng $data
+                unset($data[$index]);
+            }
+        }
+       
+        $data = array_values($data);
         return $this->orderRepo->create($data);
     }
 

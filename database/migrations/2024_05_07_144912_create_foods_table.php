@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('food_name');
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->integer('price');
-            $table->integer('quantity');
+            $table->unsignedInteger('price');
+            $table->unsignedInteger('quantity');
             $table->string('food_image')->nullable();
             $table->string('food_unit')->nullable();
-            $table->integer('quantity_sold')->default(0);
+            $table->unsignedInteger('quantity_sold')->default(0);
             $table->timestamps();
         });
     }
