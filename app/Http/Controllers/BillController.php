@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;;
 
-
+use App\Jobs\CreateNotificationJob;
 use App\Services\BillService;
+use App\Services\WaiterNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class BillController extends Controller
 {
-    //
     protected $billService;
+    protected $notificationService;
     /**
      * Class constructor.
      */
-    public function __construct(BillService $billService)
+    public function __construct(BillService $billService, WaiterNotificationService $notificationService)
     {
         $this->billService = $billService;
+        $this->notificationService = $notificationService;
     }
 
     function getAllBill()
@@ -44,8 +46,18 @@ class BillController extends Controller
         }
         $result = $this->billService->createBill($request->all());
         if($result){
-            return response()->json(["message" => "Thêm hóa đơn thành công",
-            "data" => $result], 200);
+            if ($request->has('account_id')) {
+                //bill được tạo bởi Thu Ngân thì tạo thông báo đến phục vụ.
+                $notificationData = [
+                    "table_name" => $request->table_name,
+                    "notification_status" => "Clean",
+                ];
+                $createNotification = $this->notificationService->createWaiterNotification($notificationData);
+                if($createNotification){
+                     CreateNotificationJob::dispatch($createNotification);
+                }
+            }
+            return response()->json(["message" => "Thêm hóa đơn thành công", "data" => $result], 200);
         }   else {
             return response()->json(["message" => "Thêm hóa đơn thất bại"], 500);
         }

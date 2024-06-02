@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\CreateNotificationJob;
+use App\Jobs\CreateOrderJob;
+use App\Models\WaiterNotification;
 use App\Services\OrderService;
+use App\Services\WaiterNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -10,12 +14,15 @@ class OrderController extends Controller
 {
     //
     protected $orderService;
+    protected $notificationService;
+
     /**
      * Class constructor.
      */
-    public function __construct(OrderService $orderService)
+    public function __construct(OrderService $orderService, WaiterNotificationService $notificationService )
     {
         $this->orderService = $orderService;
+        $this->notificationService = $notificationService;
     }
 
     function getAllOrder()
@@ -73,6 +80,7 @@ class OrderController extends Controller
         }
         $result = $this->orderService->createOrder($request->all());
         if($result){
+            CreateOrderJob::dispatch($result->load('food'));
             return response()->json(["message" => "Thêm đơn đặt món thành công",
             "data" => $result->load('food')], 200);
         }   else {
@@ -88,6 +96,7 @@ class OrderController extends Controller
             'quantity' => 'required',
             'table_name' => 'required',
             'order_status' => 'required',
+            'food_name' => 'required',
         ];
         $messages = [
             'food_id.required' => 'Mã mặt hàng là bắt buộc',
@@ -95,6 +104,7 @@ class OrderController extends Controller
             'quantity.required' => 'Số lượng là bắt buộc.',
             'table_name.required'   => 'Tên bàn là bắt buộc.',
             'order_status.required'   => 'Trạng thái là bắt buộc.',
+            'food_name' => 'Tên món là bắt buộc.',
         ];
         
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -111,6 +121,15 @@ class OrderController extends Controller
         ];
         $result = $this->orderService->updateOrder($newData, $id);
         if($result){
+            $notificationData = [
+                "table_name" => $request->table_name,
+                "notification_status" => $request->order_status,
+                "food_name" => $request->food_name,
+            ];
+            $createNotification = $this->notificationService->createWaiterNotification($notificationData);
+            if($createNotification){
+                 CreateNotificationJob::dispatch($createNotification);
+            }
             return response()->json(["message" => "Cập nhật đơn đặt món thành công", 
             "data" => $result->load('food')], 200);
         }   else {
