@@ -7,6 +7,7 @@ use App\Http\Controllers\TableController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\WaiterNotificationController;
 use Illuminate\Support\Facades\Route;
 
 //login
@@ -60,9 +61,6 @@ Route::get('/order/get-order-by-table',[OrderController::class, 'getOrderByTable
 Route::get('/order/all-order',[OrderController::class, 'getAllOrder']);
 Route::get('/order/get-order-by-status',[OrderController::class, 'getOrderByStatus']);
 
-
-
-
 //bill section
 Route::get('/bill/all-bill',[BillController::class,'getAllBill']);
 Route::post('/bill/create-bill',[BillController::class, 'createBill']);
@@ -74,6 +72,10 @@ Route::get('/bill/weekly-revenue',[BillController::class, 'getRevenueByDayInWeek
 Route::get('/bill/monthly-revenue',[BillController::class, 'getRevenueByMonthInYear']);
 Route::get('/bill/year-revenue',[BillController::class, 'getRevenueByYear']);
 
+//waiter notification section
+Route::get('/waiter-notification/all-notification',[WaiterNotificationController::class, 'getAllWaiterNotification']);
+Route::post('/waiter-notification/create-notification',[WaiterNotificationController::class, 'createWaiterNotification']);
+Route::post('/waiter-notification/delete-notification/{id}',[WaiterNotificationController::class, 'deleteWaiterNotification']);
 
 
 

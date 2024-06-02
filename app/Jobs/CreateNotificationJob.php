@@ -2,14 +2,14 @@
 
 namespace App\Jobs;
 
-use App\Events\CreateOrder;
+use App\Events\CreateNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class CreateOrderJob implements ShouldQueue
+class CreateNotificationJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -29,6 +29,6 @@ class CreateOrderJob implements ShouldQueue
    
 
         // Khởi tạo và dispatch sự kiện với dữ liệu
-        event(new CreateOrder($this->value));
+        event(new CreateNotification($this->value));
     }
 }
