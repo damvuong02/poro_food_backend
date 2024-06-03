@@ -63,15 +63,24 @@ class FoodRepository extends BaseRepository
         $topFoods = Food::orderByDesc('quantity_sold')->take(5)->get()->load('category');
         return $topFoods;
     }
-    public function updateBeforOrder($data = [])
-{
-    // Giảm số lượng quantity
-    $decrementResult = $this->model->where('id', $data['food_id'])->decrement('quantity', $data['quantity']);
-    $incrementResult = $this->model->where('id', $data['food_id'])->increment('quantity_sold', $data['quantity']);
-    if($decrementResult&&$incrementResult){
-        return true;
+    public function updateBeforeCreateOrder($data = [])
+    {
+        // Giảm số lượng quantity
+        $decrementResult = $this->model->where('id', $data['food_id'])->decrement('quantity', $data['quantity']);
+        $incrementResult = $this->model->where('id', $data['food_id'])->increment('quantity_sold', $data['quantity']);
+        if($decrementResult&&$incrementResult){
+            return true;
+        }
+        return false;
     }
-    return false;
-}
 
+    public function incrementQuantity($data = [])
+    {
+        // Giảm số lượng quantity
+        $incrementResult = $this->model->where('id', $data['food_id'])->increment('quantity', $data['quantity']);
+        if($incrementResult){
+            return true;
+        }
+        return false;
+    }
 }

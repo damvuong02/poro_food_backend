@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Jobs\CreateOrderJob;
 use App\Services\OrderService;
 use App\Services\WaiterNotificationService;
 use Illuminate\Http\Request;
@@ -59,13 +61,19 @@ class OrderController extends Controller
 
     public function createOrder(Request $request)
     {
-
         try {
             $data_order = json_decode($request->data, true); 
             $result = $this->orderService->createOrder($data_order);
-            return $result;
             if ($result) {
-                return response()->json(["message" => "Thêm đơn đặt món thành công"], 200);
+                $successOrder = $result['success_order'];
+                foreach ($successOrder as $index => $order) {
+                    CreateOrderJob::dispatch($order->load("food"));
+                }
+                if($result['success'] === true){
+                    return response()->json(["message" => "Thêm đơn đặt món thành công"], 200);
+                }else{
+                    return response()->json(["message" => $result['errors']], 500);
+                }
             } else {
                 return response()->json(["message" => "Thêm đơn đặt món thất bại"], 500);
             }
@@ -73,6 +81,22 @@ class OrderController extends Controller
             return response()->json(["message" => "Đã xảy ra lỗi: " . $e->getMessage()], 500);
         }
     }
+
+    public function deleteOrder(Request $request)
+    {
+        try {
+            $data_order = json_decode($request->data, true); 
+            $result = $this->orderService->deleteOrder($data_order);
+            if ($result) {
+                return response()->json(["message" => "Hủy đơn đặt món thành công"], 200);
+            } else {
+                return response()->json(["message" => "Hủy đơn đặt món thất bại"], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(["message" => "Đã xảy ra lỗi: " . $e->getMessage()], 500);
+        }
+    }
+
     public function updateOrder(Request $request, $id)
     {
         $rules = [
@@ -112,16 +136,16 @@ class OrderController extends Controller
         }
     }
 
-    public function deleteOrder($id)
-    {
-        $result = $this->orderService->deleteOrder($id);
-        if ($result) {
-            return response()->json(["message" => "Xóa đơn đặt món thành công"], 200);
-        } else {
-            return response()->json(["message" => "Xóa đơn đặt món thất bại"], 500);
-        }
+    // public function deleteOrder($id)
+    // {
+    //     $result = $this->orderService->deleteOrder($id);
+    //     if ($result) {
+    //         return response()->json(["message" => "Xóa đơn đặt món thành công"], 200);
+    //     } else {
+    //         return response()->json(["message" => "Xóa đơn đặt món thất bại"], 500);
+    //     }
 
-    }
+    // }
     public function deleteOrderByTableName(Request $request)
     {
         $table_name = $request->table_name;

@@ -3,19 +3,24 @@ namespace App\Services;
 
 use App\Repositories\FoodRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\TableRepository;
 use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
     protected $orderRepo;
     protected $foodRepo;
+    protected $tableRepo;
+
     /**
      * Class constructor.
      */
-    public function __construct(OrderRepository $orderRepo, FoodRepository $foodRepo)
+    public function __construct(OrderRepository $orderRepo, FoodRepository $foodRepo, TableRepository $tableRepo)
     {
         $this->orderRepo = $orderRepo;
         $this->foodRepo = $foodRepo;
+        $this->tableRepo = $tableRepo;
+
     }
 
     function getAllOrder()
@@ -47,65 +52,110 @@ class OrderService
         return false;
     }
 
-public function createOrder($data)
-{
-    $create_err = []; // Mảng lưu các lỗi phát sinh
+    public function createOrder($data)
+    {
+        $create_err = []; // Mảng lưu các lỗi phát sinh
+        $successOrder = []; //Mảng lưu các Order được tạo thành công
+        // Bắt đầu transaction
+        DB::beginTransaction();
 
-    // Bắt đầu transaction
-    DB::beginTransaction();
-
-    try {
-        foreach ($data as $index => $value) {
-            $food = $this->foodRepo->findById($value['food_id']);
-            
-            // Kiểm tra số lượng hàng còn lại
-            if ($value['quantity'] > $food->quantity) {
-                $create_err[] = [
-                    'food_id' => $value['food_id'],
-                    'requested_quantity' => $value['quantity'],
-                    'available_quantity' => $food->quantity,
-                    'error' => 'Insufficient quantity'
-                ];
-            } else {
-                // Tạo đơn hàng
-                $result = $this->orderRepo->create($value);
+        try {
+            foreach ($data as $index => $value) {
+                $food = $this->foodRepo->findById($value['food_id']);
                 
+                // Kiểm tra số lượng hàng còn lại
+                if ($value['quantity'] > $food->quantity) {
+                    $create_err[] = [
+                        'food_id' => $value['food_id'],
+                        'food_name' => $food['food_name'],
+                        'requested_quantity' => $value['quantity'],
+                        'available_quantity' => $food->quantity,
+                        'error' => 'Insufficient quantity'
+                    ];
+                } else {
+                    // Tạo đơn hàng
+                    $result = $this->orderRepo->create($value);
+
+                    // Cập nhật thông tin hàng hóa
+                    $result1 = $this->foodRepo->updateBeforeCreateOrder($value);
+
+                    if (!$result || !$result1) {
+                        throw new \Exception('Failed to create order or update food information.');
+                    } else{
+                        array_push($successOrder, $result);
+                    }
+                }
+            }
+
+            // Commit transaction nếu tất cả các xử lý đều thành công
+            DB::commit();
+
+            return [
+                'success' => empty($create_err),
+                'errors' => $create_err,
+                'success_order' => $successOrder
+            ];
+
+        } catch (\Exception $e) {
+            // Rollback transaction nếu có lỗi
+            DB::rollBack();
+
+            return [
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    
+    public function deleteOrder($data)
+    {
+        // Bắt đầu transaction
+        DB::beginTransaction();
+        
+        try {
+            foreach ($data as $index => $value) {   
+                // Xóa order
+                $result = $this->orderRepo->delete($value["id"]);
+
                 // Cập nhật thông tin hàng hóa
-                $result1 = $this->foodRepo->updateBeforOrder($value);
+                $result1 = $this->foodRepo->incrementQuantity($value);
 
                 if (!$result || !$result1) {
                     throw new \Exception('Failed to create order or update food information.');
+                } else{
+                    
                 }
             }
+            $cookingOrder = $this->getOrderByTableAndStatus($value['table_name'], "Cooking");
+            if(!$cookingOrder){
+                $this->tableRepo->updateStatusByTableName($value['table_name'], "Empty");
+            } 
+            // Commit transaction nếu tất cả các xử lý đều thành công
+            DB::commit();
+
+            return [
+                'message' =>"Success"
+            ];
+
+        } catch (\Exception $e) {
+            // Rollback transaction nếu có lỗi
+            DB::rollBack();
+
+            return [
+                'error' => $e->getMessage()
+            ];
         }
-
-        // Commit transaction nếu tất cả các xử lý đều thành công
-        DB::commit();
-
-        return [
-            'success' => empty($create_err),
-            'errors' => $create_err
-        ];
-
-    } catch (\Exception $e) {
-        // Rollback transaction nếu có lỗi
-        DB::rollBack();
-
-        return [
-            'error' => $e->getMessage()
-        ];
     }
-}
 
     function updateOrder($data, $id)
     {
         return $this->orderRepo->update($data, $id);
     }
 
-    function deleteOrder($id)
-    {
-        return $this->orderRepo->delete($id);
-    }
+    // function deleteOrder($id)
+    // {
+    //     return $this->orderRepo->delete($id);
+    // }
 
     function deleteOrderByTable($table_name)
     {
