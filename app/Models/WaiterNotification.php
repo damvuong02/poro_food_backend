@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Table extends BaseModel
+class WaiterNotification extends BaseModel 
 {
     use HasFactory;
-    protected $table = "tables";
 
+    protected $table = "waiter_notifications";
     protected $fillable = [
         'table_name',
-        'table_status',
+        'notification_status',
+        'food_name',
     ];
     
 }
