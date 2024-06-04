@@ -10,6 +10,10 @@ Broadcast::channel('create-order', function () {
     return true;
 });
 
+Broadcast::channel('delete-update-order', function () {
+    return true;
+});
+
 Broadcast::channel('create-notification', function () {
     return true;
 });

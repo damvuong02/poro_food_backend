@@ -82,11 +82,11 @@ class OrderController extends Controller
         }
     }
 
-    public function deleteOrder(Request $request)
+    public function deleteNewOrder(Request $request)
     {
         try {
             $data_order = json_decode($request->data, true); 
-            $result = $this->orderService->deleteOrder($data_order);
+            $result = $this->orderService->deleteNewOrder($data_order);
             if ($result) {
                 return response()->json(["message" => "Hủy đơn đặt món thành công"], 200);
             } else {
@@ -136,16 +136,16 @@ class OrderController extends Controller
         }
     }
 
-    // public function deleteOrder($id)
-    // {
-    //     $result = $this->orderService->deleteOrder($id);
-    //     if ($result) {
-    //         return response()->json(["message" => "Xóa đơn đặt món thành công"], 200);
-    //     } else {
-    //         return response()->json(["message" => "Xóa đơn đặt món thất bại"], 500);
-    //     }
+    public function deleteOrder($id)
+    {
+        $result = $this->orderService->deleteOrder($id);
+        if ($result) {
+            return response()->json(["message" => "Xóa đơn đặt món thành công"], 200);
+        } else {
+            return response()->json(["message" => "Xóa đơn đặt món thất bại"], 500);
+        }
+    }
 
-    // }
     public function deleteOrderByTableName(Request $request)
     {
         $table_name = $request->table_name;

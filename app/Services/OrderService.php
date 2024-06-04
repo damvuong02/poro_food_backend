@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Jobs\DeleteUpdateOrderJob;
 use App\Repositories\FoodRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\TableRepository;
@@ -107,7 +108,7 @@ class OrderService
     }
 
     
-    public function deleteOrder($data)
+    public function deleteNewOrder($data)
     {
         // Bắt đầu transaction
         DB::beginTransaction();
@@ -130,9 +131,11 @@ class OrderService
             if(!$cookingOrder){
                 $this->tableRepo->updateStatusByTableName($value['table_name'], "Empty");
             } 
+            $allOrder = $this->orderRepo->getAllOrder();
+            $allOrder =json_encode($allOrder);
+            DeleteUpdateOrderJob::dispatch($allOrder);
             // Commit transaction nếu tất cả các xử lý đều thành công
             DB::commit();
-
             return [
                 'message' =>"Success"
             ];
@@ -148,14 +151,25 @@ class OrderService
     }
 
     function updateOrder($data, $id)
-    {
-        return $this->orderRepo->update($data, $id);
+    {   
+        $result = $this->orderRepo->update($data, $id);
+        $allOrder = $this->orderRepo->getAllOrder();
+        $allOrder =json_encode($allOrder);
+        DeleteUpdateOrderJob::dispatch($allOrder);
+        return $result;
     }
 
-    // function deleteOrder($id)
-    // {
-    //     return $this->orderRepo->delete($id);
-    // }
+    function deleteOrder($id)
+    {   
+        $result = $this->orderRepo->delete($id);
+        if($result){
+            $allOrder = $this->orderRepo->getAllOrder();
+            $allOrder =json_encode($allOrder);
+            DeleteUpdateOrderJob::dispatch($allOrder);
+        }
+        
+        return $result;
+    }
 
     function deleteOrderByTable($table_name)
     {
