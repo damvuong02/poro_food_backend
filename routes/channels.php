@@ -21,3 +21,11 @@ Broadcast::channel('create-notification', function () {
 Broadcast::channel('delete-notification', function () {
     return true;
 });
+
+Broadcast::channel('pay-bill', function () {
+    return true;
+});
+
+Broadcast::channel('update-food', function () {
+    return true;
+});

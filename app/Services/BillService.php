@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Jobs\CreateNotificationJob;
 use App\Jobs\DeleteUpdateOrderJob;
+use App\Jobs\PayBillJob;
 use App\Repositories\BillRepository;
 use App\Repositories\FoodRepository;
 use App\Repositories\OrderRepository;
@@ -43,7 +44,7 @@ class BillService{
         try {
             $orders = $this->orderRepo->getOrderByTable($data["table_name"])->toArray();
             $newOrders = array_filter($orders, function ($order) {
-            return $order['order_status'] === 'New';
+                return $order['order_status'] === 'New';
             });
             $otherOrders = array_values(array_diff_key($orders, $newOrders));
 
@@ -82,10 +83,10 @@ class BillService{
             $allOrder = $this->orderRepo->getAllOrder();
             $allOrder =json_encode($allOrder);
             DeleteUpdateOrderJob::dispatch($allOrder);
-            
+            PayBillJob::dispatch($bill->table_name);
             // Commit transaction nếu tất cả các xử lý đều thành công
             DB::commit();
-            return $bill;
+        return $bill;
 
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
