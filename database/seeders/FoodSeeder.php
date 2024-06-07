@@ -23,7 +23,7 @@ class FoodSeeder extends Seeder
                 'food_name'=>$faker->name(),
                 'category_id'=>$faker->randomElement($cates),
                 'price'=>random_int(10000, 300000),
-                'quantity'=>random_int(10, 200),
+                'quantity'=>random_int(100, 200),
                 'food_image'=>null,
                 'food_unit'=>$faker->randomElement(['Bát', 'Đĩa', 'Cái', 'Chai', 'Lon', 'Nồi']),
             ]);

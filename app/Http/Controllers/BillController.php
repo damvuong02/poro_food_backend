@@ -44,19 +44,14 @@ class BillController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 422);
         }
-        $result = $this->billService->createBill($request->all());
+        $result = null;
+        if($request->has('account_id')){
+            $result = $this->billService->cashierCreateBill($request->all());
+        }else{
+
+            $result = $this->billService->createBill($request->all());
+        }
         if($result){
-            if ($request->has('account_id')) {
-                //bill được tạo bởi Thu Ngân thì tạo thông báo đến phục vụ.
-                $notificationData = [
-                    "table_name" => $request->table_name,
-                    "notification_status" => "Clean",
-                ];
-                $createNotification = $this->notificationService->createWaiterNotification($notificationData);
-                if($createNotification){
-                     CreateNotificationJob::dispatch($createNotification);
-                }
-            }
             return response()->json(["message" => "Thêm hóa đơn thành công", "data" => $result], 200);
         }   else {
             return response()->json(["message" => "Thêm hóa đơn thất bại"], 500);

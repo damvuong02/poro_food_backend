@@ -10,10 +10,22 @@ Broadcast::channel('create-order', function () {
     return true;
 });
 
+Broadcast::channel('delete-update-order', function () {
+    return true;
+});
+
 Broadcast::channel('create-notification', function () {
     return true;
 });
 
 Broadcast::channel('delete-notification', function () {
+    return true;
+});
+
+Broadcast::channel('pay-bill', function () {
+    return true;
+});
+
+Broadcast::channel('update-food', function () {
     return true;
 });

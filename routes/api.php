@@ -55,6 +55,7 @@ Route::get('/food/top-food',[FoodController::class, 'getTopFoodQuantitySold']);
 Route::get('/order/get-order-by-table-status',[OrderController::class,'getOrderByTableAndStatus']);
 Route::post('/order/create-order',[OrderController::class, 'createOrder']);
 Route::post('/order/update-order/{id}',[OrderController::class, 'updateOrder']);
+Route::post('/order/delete-new-order',[OrderController::class, 'deleteNewOrder']);
 Route::post('/order/delete-order/{id}',[OrderController::class, 'deleteOrder']);
 Route::post('/order/delete-order-by-table',[OrderController::class, 'deleteOrderByTableName']);
 Route::get('/order/get-order-by-table',[OrderController::class, 'getOrderByTable']);

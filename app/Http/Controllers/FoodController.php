@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;;
 
-
 use App\Services\FoodService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
