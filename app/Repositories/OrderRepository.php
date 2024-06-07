@@ -38,4 +38,13 @@ class OrderRepository extends BaseRepository
     {
         return $this->model->where('table_name', $table_name)->delete();
     }
+
+    public function create($data = [])
+    {
+        $result = $this->model->create($data);
+        if ($result) {
+            return $result->load('food.category');
+        }
+        return false;
+    }
 }

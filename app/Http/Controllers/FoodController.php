@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;;
 
-use App\Jobs\UpdateFoodJob;
 use App\Services\FoodService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -94,7 +93,6 @@ class FoodController extends Controller
         ];
         $result = $this->foodService->updateFood($newData, $id);
         if($result){
-            UpdateFoodJob::dispatch($result);
             return response()->json(["message" => "Cập nhật mặt hàng thành công", 
             "data" => $result], 200);
         }   else {

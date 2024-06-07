@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Jobs\UpdateFoodJob;
 use App\Models\Food;
 use App\Repositories\BaseRepository;
 
@@ -48,7 +49,7 @@ class FoodRepository extends BaseRepository
 
     public function searchFood(string $value, int $category_id)
     {
-        if ($category_id == null) {
+        if ($category_id < 0) {
 
             $result = $this->model->where('food_name', 'like', '%' . $value . '%')->with('category')->paginate(10000);
             return $result;
@@ -67,6 +68,9 @@ class FoodRepository extends BaseRepository
     {
         // Giảm số lượng quantity
         $decrementResult = $this->model->where('id', $data['food_id'])->decrement('quantity', $data['quantity']);
+        if($decrementResult){
+            UpdateFoodJob::dispatch($this->model->find($data['food_id'])->load('category'));
+        }
         $incrementResult = $this->model->where('id', $data['food_id'])->increment('quantity_sold', $data['quantity']);
         if($decrementResult&&$incrementResult){
             return true;
@@ -79,6 +83,7 @@ class FoodRepository extends BaseRepository
         // Giảm số lượng quantity
         $incrementResult = $this->model->where('id', $data['food_id'])->increment('quantity', $data['quantity']);
         if($incrementResult){
+            UpdateFoodJob::dispatch($this->model->find($data['food_id'])->load('category'));
             return true;
         }
         return false;
