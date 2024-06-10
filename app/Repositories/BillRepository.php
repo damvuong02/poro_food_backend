@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Bill;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class BillRepository extends BaseRepository
@@ -97,16 +98,19 @@ class BillRepository extends BaseRepository
         $bills = Bill::whereYear('created_at', $year)
                      ->whereMonth('created_at', $month)
                      ->get();
-        
         // Lặp qua từng hóa đơn
         foreach ($bills as $bill) {
-            // Decode trường "bill_detail" để có thể truy cập thông tin chi tiết của mỗi món hàng
-            $billDetails = json_decode($bill->bill_detail, true);
-            
-            // Lặp qua từng chi tiết hóa đơn
-            foreach ($billDetails as $detail) {
-                // Tính tổng doanh thu từ giá tiền và số lượng của mỗi món hàng
-                $totalRevenue += $detail['food']['price'] * $detail['quantity'];
+            try {
+                // Decode trường "bill_detail" để có thể truy cập thông tin chi tiết của mỗi món hàng
+                $billDetails = json_decode($bill->bill_detail, true);
+                
+                // Lặp qua từng chi tiết hóa đơn
+                foreach ($billDetails as $detail) {
+                    // Tính tổng doanh thu từ giá tiền và số lượng của mỗi món hàng
+                    $totalRevenue += $detail['food']['price'] * $detail['quantity'];
+                }
+            } catch(Exception) {
+
             }
         }
         
@@ -130,7 +134,7 @@ class BillRepository extends BaseRepository
     
     // Nhóm các hóa đơn theo năm dựa vào cột `created_at`
     $billsByYear = $bills->groupBy(function($bill) {
-        return \Carbon\Carbon::parse($bill->created_at)->year;
+        return Carbon::parse($bill->created_at)->year;
     });
     
     // Tính toán tổng doanh thu cho mỗi năm và tạo mảng chứa doanh thu theo năm
@@ -139,13 +143,17 @@ class BillRepository extends BaseRepository
 
         // Duyệt qua từng hóa đơn trong nhóm năm hiện tại
         foreach ($bills as $bill) {
-            // Giải mã JSON trong trường `bill_detail` thành mảng
-            $billDetails = json_decode($bill->bill_detail, true);
+            try {
+                // Giải mã JSON trong trường `bill_detail` thành mảng
+                $billDetails = json_decode($bill->bill_detail, true);
 
-            // Duyệt qua từng mục chi tiết hóa đơn
-            foreach ($billDetails as $detail) {
-                // Tính doanh thu của từng mục (giá * số lượng) và cộng vào tổng doanh thu
-                $totalRevenue += $detail['food']['price'] * $detail['quantity'];
+                // Duyệt qua từng mục chi tiết hóa đơn
+                foreach ($billDetails as $detail) {
+                    // Tính doanh thu của từng mục (giá * số lượng) và cộng vào tổng doanh thu
+                    $totalRevenue += $detail['food']['price'] * $detail['quantity'];
+                }
+            }catch (Exception){
+                
             }
         }
 

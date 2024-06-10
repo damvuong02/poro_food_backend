@@ -26,7 +26,7 @@ class FoodController extends Controller
     
     function createFood(Request $request) {
         $rules = [
-            'food_name' => 'required|max:200|unique:foods,food_name',
+            'food_name' => 'required|max:200',
             'category_id' => 'required',
             'price' => 'required',
             'quantity' => 'required'
@@ -34,7 +34,6 @@ class FoodController extends Controller
         $messages = [
             'food_name.required' => 'Tên mặt hàng là bắt buộc.',
             'food_name.max'      => 'Tên mặt hàng không được vượt quá 200 ký tự.',
-            'food_name.unique'   => 'Tên mặt hàng đã được sử dụng.',
         
             'category_id.required' => 'Mã nhóm mặt hàng là bắt buộc.',
 
@@ -48,7 +47,12 @@ class FoodController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 422);
         }
-        $result = $this->foodService->createFood($request->all());
+        $data = $request->all();
+        // Ensure quantity_sold is not null
+        $data['quantity_sold'] = $data['quantity_sold'] ?? 0;
+
+        $result = $this->foodService->createFood($data);
+
         if($result){
             return response()->json(["message" => "Thêm mặt hàng thành công",
             "data" => $result], 200);
