@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Jobs\CreateNotificationJob;
 use App\Jobs\DeleteUpdateOrderJob;
 use App\Jobs\PayBillJob;
+use App\Models\Bill;
 use App\Repositories\BillRepository;
 use App\Repositories\FoodRepository;
 use App\Repositories\OrderRepository;
@@ -59,13 +60,17 @@ class BillService{
                 }
             }
             $bill_data = [
-            "table_name" => $data["table_name"], 
-            "account_id" => $data["account_id"], 
-            "created_at" => $data["created_at"],
-            "bill_detail" => json_encode($otherOrders),
-            ];
-            // tạo bill
-            $bill = $this->billRepo->create($bill_data);
+                "table_name" => $data["table_name"], 
+                "account_id" => $data["account_id"], 
+                "created_at" => $data["created_at"],
+                "bill_detail" => json_encode($otherOrders),
+                ];
+            $bill = new Bill($bill_data);
+            $bill->id = -1;
+            if(!empty($otherOrders)) {
+                // tạo bill
+                $bill = $this->billRepo->create($bill_data);
+            }
             //xóa order liên quan
             $this->orderRepo->deleteOrderByTable($data["table_name"]);
 
@@ -83,10 +88,10 @@ class BillService{
             $allOrder = $this->orderRepo->getAllOrder();
             $allOrder =json_encode($allOrder);
             DeleteUpdateOrderJob::dispatch($allOrder);
-            PayBillJob::dispatch($bill->table_name);
+            PayBillJob::dispatch($data["table_name"]);
             // Commit transaction nếu tất cả các xử lý đều thành công
             DB::commit();
-        return $bill;
+            return $bill;
 
         } catch (\Exception $e) {
             // Rollback transaction nếu có lỗi
