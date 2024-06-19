@@ -70,9 +70,9 @@ class OrderController extends Controller
                     CreateOrderJob::dispatch($order->load("food"));
                 }
                 if($result['success'] === true){
-                    return response()->json(["message" => $result['success_order'], "result" => true], 200);
+                    return response()->json(["message" => $result['success_order'], "success_order" => $result['success_order'], "result" => true], 200);
                 }else{
-                    return response()->json(["message" => $result['errors'], "result" => false], 500);
+                    return response()->json(["message" => $result['errors'], "success_order" => $result['success_order'], "result" => false], 500);
                 }
             } else {
                 return response()->json(["message" => "Thêm đơn đặt món thất bại"], 500);
