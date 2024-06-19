@@ -1,10 +1,12 @@
 <?php
 namespace App\Services;
 
+use App\Jobs\CreateNotificationJob;
 use App\Jobs\DeleteUpdateOrderJob;
 use App\Repositories\FoodRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\TableRepository;
+use App\Repositories\WaiterNotificationRepository;
 use Illuminate\Support\Facades\DB;
 
 class OrderService
@@ -12,15 +14,17 @@ class OrderService
     protected $orderRepo;
     protected $foodRepo;
     protected $tableRepo;
+    protected $notificationRepo;
 
     /**
      * Class constructor.
      */
-    public function __construct(OrderRepository $orderRepo, FoodRepository $foodRepo, TableRepository $tableRepo)
+    public function __construct(OrderRepository $orderRepo, FoodRepository $foodRepo, TableRepository $tableRepo, WaiterNotificationRepository $notificationRepo)
     {
         $this->orderRepo = $orderRepo;
         $this->foodRepo = $foodRepo;
         $this->tableRepo = $tableRepo;
+        $this->notificationRepo = $notificationRepo;
 
     }
 
@@ -156,16 +160,32 @@ class OrderService
         $allOrder = $this->orderRepo->getAllOrder();
         $allOrder =json_encode($allOrder);
         DeleteUpdateOrderJob::dispatch($allOrder);
+        $notificationData = [
+            "table_name" => $data["table_name"],
+            "notification_status" => "Cooking",
+        ];
+        $createNotification = $this->notificationRepo->create($notificationData);
+        if($createNotification){
+             CreateNotificationJob::dispatch($createNotification);
+        }
         return $result;
     }
 
-    function deleteOrder($id)
+    function deleteOrder($data)
     {   
-        $result = $this->orderRepo->delete($id);
+        $result = $this->orderRepo->delete($data["id"]);
         if($result){
             $allOrder = $this->orderRepo->getAllOrder();
             $allOrder =json_encode($allOrder);
             DeleteUpdateOrderJob::dispatch($allOrder);
+            $notificationData = [
+                "table_name" => $data["table_name"],
+                "notification_status" => "Done",
+            ];
+            $createNotification = $this->notificationRepo->create($notificationData);
+            if($createNotification){
+                 CreateNotificationJob::dispatch($createNotification);
+            }
         }
         
         return $result;

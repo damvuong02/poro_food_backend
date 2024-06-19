@@ -136,9 +136,9 @@ class OrderController extends Controller
         }
     }
 
-    public function deleteOrder($id)
+    public function deleteOrder(Request $request)
     {
-        $result = $this->orderService->deleteOrder($id);
+        $result = $this->orderService->deleteOrder($request->all());
         if ($result) {
             return response()->json(["message" => "Xóa đơn đặt món thành công"], 200);
         } else {
