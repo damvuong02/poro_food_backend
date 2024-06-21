@@ -94,6 +94,7 @@ class FoodController extends Controller
             "quantity" => $request->quantity,
             "food_image" => $request->food_image,
             "food_unit" => $request->food_unit,
+            "need_cooking" => $request->need_cooking
         ];
         $result = $this->foodService->updateFood($newData, $id);
         if($result){

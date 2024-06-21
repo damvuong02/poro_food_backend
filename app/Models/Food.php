@@ -17,7 +17,7 @@ class Food extends BaseModel
         'food_image',
         'food_unit',
         'quantity_sold',
-
+        'need_cooking',
     ];
 
     public function category()

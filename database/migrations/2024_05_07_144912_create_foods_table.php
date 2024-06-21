@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('food_image')->nullable();
             $table->string('food_unit')->nullable();
             $table->unsignedInteger('quantity_sold')->default(0);
+            $table->boolean('need_cooking')->default(0);
             $table->timestamps();
         });
     }
