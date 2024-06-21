@@ -30,29 +30,33 @@ class CategoryController extends Controller
     }
 
     
-    function createCategory(Request $request) {
+    public function createCategory(Request $request) {
         $rules = [
-            'category_name' => 'required|max:200|unique:categories,category_name',
+            'category_name' => 'required|max:200',
         ];
         $messages = [
             'category_name.required' => 'Tên nhóm mặt hàng là bắt buộc.',
             'category_name.max'      => 'Tên nhóm mặt hàng không được vượt quá 200 ký tự.',
-            'category_name.unique'   => 'Tên nhóm mặt hàng đã được sử dụng.',
-        
         ];
-        
+    
         $validator = Validator::make($request->all(), $rules, $messages);
+        
         if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], 422);
+            // Get the first error message
+            $errorMessage = $validator->errors()->first('category_name');
+            return response()->json(['message' => $errorMessage], 422);
         }
+    
         $result = $this->categoryService->createCategory($request->all());
-        if($result){
-            return response()->json(["message" => "Thêm nhóm mặt hàng thành công",
-            "data" => $result], 200);
-        }   else {
+    
+        if ($result) {
+            return response()->json([
+                "message" => "Thêm nhóm mặt hàng thành công",
+                "data" => $result
+            ], 200);
+        } else {
             return response()->json(["message" => "Thêm nhóm mặt hàng thất bại"], 500);
         }
-        
     }
 
     function updateCategory(Request $request, $id) {
@@ -63,12 +67,13 @@ class CategoryController extends Controller
         $messages = [
             'category_name.required' => 'Tên nhóm mặt hàng là bắt buộc.',
             'category_name.max'      => 'Tên nhóm mặt hàng không được vượt quá 200 ký tự.',
-        
         ];
         
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], 422);
+            // Get the first error message
+            $errorMessage = $validator->errors()->first('category_name');
+            return response()->json(['message' => $errorMessage], 422);
         }
         
         $newData = [

@@ -56,7 +56,7 @@ Route::get('/order/get-order-by-table-status',[OrderController::class,'getOrderB
 Route::post('/order/create-order',[OrderController::class, 'createOrder']);
 Route::post('/order/update-order/{id}',[OrderController::class, 'updateOrder']);
 Route::post('/order/delete-new-order',[OrderController::class, 'deleteNewOrder']);
-Route::post('/order/delete-order/{id}',[OrderController::class, 'deleteOrder']);
+Route::post('/order/delete-order',[OrderController::class, 'deleteOrder']);
 Route::post('/order/delete-order-by-table',[OrderController::class, 'deleteOrderByTableName']);
 Route::get('/order/get-order-by-table',[OrderController::class, 'getOrderByTable']);
 Route::get('/order/all-order',[OrderController::class, 'getAllOrder']);

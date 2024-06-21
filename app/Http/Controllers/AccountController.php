@@ -65,7 +65,7 @@ class AccountController extends Controller
             'user_name' => 'required|max:200|unique:accounts,user_name',
             'name' => 'required|max:200',
             'password' => 'required',
-            'roll' => 'required'
+            'role' => 'required'
         ];
         $messages = [
             'user_name.required' => 'Tên người dùng là bắt buộc.',
@@ -77,7 +77,7 @@ class AccountController extends Controller
         
             'password.required' => 'Trường mật khẩu là bắt buộc.',
         
-            'roll.required' => 'Trường quyền là bắt buộc.'
+            'role.required' => 'Trường quyền là bắt buộc.'
         ];
         
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -98,7 +98,7 @@ class AccountController extends Controller
             'user_name' => 'required|max:200',
             'name' => 'required|max:200',
             'password' => 'required',
-            'roll' => 'required'
+            'role' => 'required'
         ];
         $messages = [
             'user_name.required' => 'Tên người dùng là bắt buộc.',
@@ -109,7 +109,7 @@ class AccountController extends Controller
         
             'password.required' => 'Trường mật khẩu là bắt buộc.',
         
-            'roll.required' => 'Trường quyền là bắt buộc.'
+            'role.required' => 'Trường quyền là bắt buộc.'
         ];
         
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -120,7 +120,7 @@ class AccountController extends Controller
         $newData = [
             "user_name" => $request->user_name,
             "name" => $request->name,
-            "roll" => $request->roll,
+            "role" => $request->role,
             "password" => $request->password,
         ];
         $result = $this->accountService->updateAccount($newData, $id);

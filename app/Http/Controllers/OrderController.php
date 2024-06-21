@@ -70,9 +70,9 @@ class OrderController extends Controller
                     CreateOrderJob::dispatch($order->load("food"));
                 }
                 if($result['success'] === true){
-                    return response()->json(["message" => $result['success_order'], "result" => true], 200);
+                    return response()->json(["message" => $result['success_order'], "success_order" => $result['success_order'], "result" => true], 200);
                 }else{
-                    return response()->json(["message" => $result['errors'], "result" => false], 500);
+                    return response()->json(["message" => $result['errors'], "success_order" => $result['success_order'], "result" => false], 500);
                 }
             } else {
                 return response()->json(["message" => "Thêm đơn đặt món thất bại"], 500);
@@ -136,9 +136,9 @@ class OrderController extends Controller
         }
     }
 
-    public function deleteOrder($id)
+    public function deleteOrder(Request $request)
     {
-        $result = $this->orderService->deleteOrder($id);
+        $result = $this->orderService->deleteOrder($request->all());
         if ($result) {
             return response()->json(["message" => "Xóa đơn đặt món thành công"], 200);
         } else {
