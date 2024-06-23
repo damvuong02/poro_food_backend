@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Jobs\CreateNotificationJob;
+use App\Jobs\CreateOrderJob;
 use App\Jobs\DeleteUpdateOrderJob;
 use App\Repositories\FoodRepository;
 use App\Repositories\OrderRepository;
@@ -78,8 +79,16 @@ class OrderService
                         'error' => 'Insufficient quantity'
                     ];
                 } else {
+                    $orderData = [
+                        'food_id' => $value['food_id'],
+                        'price' => $value['price'],
+                        'quantity' => $value['quantity'],
+                        'table_name' => $value['table_name'],
+                        'order_status' => $food->need_cooking == 0 ? "Done" : "New",
+                        'note' => $value['note'],
+                    ];
                     // Tạo đơn hàng
-                    $result = $this->orderRepo->create($value);
+                    $result = $this->orderRepo->create($orderData);
 
                     // Cập nhật thông tin hàng hóa
                     $result1 = $this->foodRepo->updateBeforeCreateOrder($value);
@@ -88,6 +97,9 @@ class OrderService
                         throw new \Exception('Failed to create order or update food information.');
                     } else{
                         array_push($successOrder, $result);
+                        if($food->need_cooking == 1){
+                            CreateOrderJob::dispatch($result->load("food"));
+                        }
                     }
                 }
             }
@@ -165,9 +177,6 @@ class OrderService
             "notification_status" => "Cooking",
         ];
         $createNotification = $this->notificationRepo->create($notificationData);
-        if($createNotification){
-             CreateNotificationJob::dispatch($createNotification);
-        }
         return $result;
     }
 
@@ -183,9 +192,6 @@ class OrderService
                 "notification_status" => "Done",
             ];
             $createNotification = $this->notificationRepo->create($notificationData);
-            if($createNotification){
-                 CreateNotificationJob::dispatch($createNotification);
-            }
         }
         
         return $result;

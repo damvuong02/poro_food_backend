@@ -8,7 +8,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PayBill implements ShouldBroadcast
+class UpdateTable implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -26,12 +26,12 @@ class PayBill implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('pay-bill'),
+            new Channel('update-table'),
         ];
     }
     public function broadcastAs()
     {
-        return 'pay-bill';
+        return 'update-table';
     }
 
     public function broadcastWith()

@@ -8,7 +8,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class DeleteNotification implements ShouldBroadcast
+class CreateDeleteNotification implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -26,12 +26,12 @@ class DeleteNotification implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('delete-notification'),
+            new Channel('create-delete-notification'),
         ];
     }
     public function broadcastAs()
     {
-        return 'delete-notification';
+        return 'create-delete-notification';
     }
 
     public function broadcastWith()

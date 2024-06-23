@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\UpdateTableJob;
 use App\Repositories\TableRepository;
 
 class TableService{
@@ -25,7 +26,9 @@ class TableService{
     }
 
     function updateTable($data, $id){
-        return $this->tableRepo->update($data, $id);
+        $table = $this->tableRepo->update($data, $id);
+        UpdateTableJob::dispatch($table);
+        return $table;
     }
 
     function deleteTable($id){

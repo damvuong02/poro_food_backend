@@ -2,14 +2,14 @@
 
 namespace App\Jobs;
 
-use App\Events\DeleteNotification;
+use App\Events\UpdateTable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class DeleteNotificationJob implements ShouldQueue
+class UpdateTableJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -29,6 +29,6 @@ class DeleteNotificationJob implements ShouldQueue
    
 
         // Khởi tạo và dispatch sự kiện với dữ liệu
-        event(new DeleteNotification($this->value));
+        event(new UpdateTable($this->value));
     }
 }
