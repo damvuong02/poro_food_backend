@@ -25,3 +25,7 @@ Broadcast::channel('update-table', function () {
 Broadcast::channel('update-food', function () {
     return true;
 });
+
+Broadcast::channel('number-notification', function () {
+    return true;
+});

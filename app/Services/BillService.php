@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Jobs\CreateDeleteNotificationJob;
 use App\Jobs\DeleteUpdateOrderJob;
 use App\Models\Bill;
 use App\Repositories\BillRepository;

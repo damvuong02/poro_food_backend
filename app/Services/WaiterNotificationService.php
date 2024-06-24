@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-use App\Events\CreateDeleteNotification;
+use App\Jobs\CreateDeleteNotificationJob;
+use App\Jobs\NumberOfNotificationJob;
 use App\Repositories\WaiterNotificationRepository;
 
 class WaiterNotificationService{
@@ -24,7 +25,8 @@ class WaiterNotificationService{
     function createWaiterNotification($data){
         $this->waiterNotificationRepo->create($data);
         $allNotification = $this->waiterNotificationRepo->getAll();
-        CreateDeleteNotification::dispatch($allNotification);
+        CreateDeleteNotificationJob::dispatch($allNotification);
+        NumberOfNotificationJob::dispatch(count($allNotification));
         return  $allNotification;
     }
 

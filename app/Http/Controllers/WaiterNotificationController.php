@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;;
 
 use App\Jobs\CreateDeleteNotificationJob;
+use App\Jobs\NumberOfNotificationJob;
 use App\Services\WaiterNotificationService;
 use Illuminate\Http\Request;
 
@@ -37,6 +38,7 @@ class WaiterNotificationController extends Controller
         $result = $this->waiterNotificationService->deleteWaiterNotification($id);
         if($result){
             CreateDeleteNotificationJob::dispatch($result);
+            NumberOfNotificationJob::dispatch(count($result));
             return response()->json(["message" => $result], 200);
         }   else {
             return response()->json(["message" => "Xóa thông báo thất bại"], 500);

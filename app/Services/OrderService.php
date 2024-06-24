@@ -1,13 +1,11 @@
 <?php
 namespace App\Services;
 
-use App\Jobs\CreateNotificationJob;
 use App\Jobs\CreateOrderJob;
 use App\Jobs\DeleteUpdateOrderJob;
 use App\Repositories\FoodRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\TableRepository;
-use App\Repositories\WaiterNotificationRepository;
 use Illuminate\Support\Facades\DB;
 
 class OrderService
@@ -15,17 +13,17 @@ class OrderService
     protected $orderRepo;
     protected $foodRepo;
     protected $tableRepo;
-    protected $notificationRepo;
+    protected $notificationService;
 
     /**
      * Class constructor.
      */
-    public function __construct(OrderRepository $orderRepo, FoodRepository $foodRepo, TableRepository $tableRepo, WaiterNotificationRepository $notificationRepo)
+    public function __construct(OrderRepository $orderRepo, FoodRepository $foodRepo, TableRepository $tableRepo, WaiterNotificationService $notificationService)
     {
         $this->orderRepo = $orderRepo;
         $this->foodRepo = $foodRepo;
         $this->tableRepo = $tableRepo;
-        $this->notificationRepo = $notificationRepo;
+        $this->notificationService = $notificationService;
 
     }
 
@@ -171,12 +169,14 @@ class OrderService
         $result = $this->orderRepo->update($data, $id);
         $allOrder = $this->orderRepo->getAllOrder();
         $allOrder =json_encode($allOrder);
+        $food = $this->foodRepo->findById($result['food_id']);
         DeleteUpdateOrderJob::dispatch($allOrder);
         $notificationData = [
             "table_name" => $data["table_name"],
+            "food_name" => $food->food_name,
             "notification_status" => "Cooking",
         ];
-        $createNotification = $this->notificationRepo->create($notificationData);
+        $this->notificationService->createWaiterNotification($notificationData);
         return $result;
     }
 
@@ -186,12 +186,14 @@ class OrderService
         if($result){
             $allOrder = $this->orderRepo->getAllOrder();
             $allOrder =json_encode($allOrder);
+            $food = $this->foodRepo->findById($data['food_id']);
             DeleteUpdateOrderJob::dispatch($allOrder);
             $notificationData = [
                 "table_name" => $data["table_name"],
+                "food_name" => $food->food_name,
                 "notification_status" => "Done",
             ];
-            $createNotification = $this->notificationRepo->create($notificationData);
+            $createNotification = $this->notificationService->createWaiterNotification($notificationData);
         }
         
         return $result;
