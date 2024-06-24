@@ -1,12 +1,11 @@
 <?php
 namespace App\Services;
 
-use App\Jobs\CreateNotificationJob;
+use App\Jobs\CreateOrderJob;
 use App\Jobs\DeleteUpdateOrderJob;
 use App\Repositories\FoodRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\TableRepository;
-use App\Repositories\WaiterNotificationRepository;
 use Illuminate\Support\Facades\DB;
 
 class OrderService
@@ -14,17 +13,17 @@ class OrderService
     protected $orderRepo;
     protected $foodRepo;
     protected $tableRepo;
-    protected $notificationRepo;
+    protected $notificationService;
 
     /**
      * Class constructor.
      */
-    public function __construct(OrderRepository $orderRepo, FoodRepository $foodRepo, TableRepository $tableRepo, WaiterNotificationRepository $notificationRepo)
+    public function __construct(OrderRepository $orderRepo, FoodRepository $foodRepo, TableRepository $tableRepo, WaiterNotificationService $notificationService)
     {
         $this->orderRepo = $orderRepo;
         $this->foodRepo = $foodRepo;
         $this->tableRepo = $tableRepo;
-        $this->notificationRepo = $notificationRepo;
+        $this->notificationService = $notificationService;
 
     }
 
@@ -78,8 +77,16 @@ class OrderService
                         'error' => 'Insufficient quantity'
                     ];
                 } else {
+                    $orderData = [
+                        'food_id' => $value['food_id'],
+                        'price' => $value['price'],
+                        'quantity' => $value['quantity'],
+                        'table_name' => $value['table_name'],
+                        'order_status' => $food->need_cooking == 0 ? "Done" : "New",
+                        'note' => $value['note'],
+                    ];
                     // Tạo đơn hàng
-                    $result = $this->orderRepo->create($value);
+                    $result = $this->orderRepo->create($orderData);
 
                     // Cập nhật thông tin hàng hóa
                     $result1 = $this->foodRepo->updateBeforeCreateOrder($value);
@@ -88,6 +95,9 @@ class OrderService
                         throw new \Exception('Failed to create order or update food information.');
                     } else{
                         array_push($successOrder, $result);
+                        if($food->need_cooking == 1){
+                            CreateOrderJob::dispatch($result->load("food"));
+                        }
                     }
                 }
             }
@@ -159,15 +169,14 @@ class OrderService
         $result = $this->orderRepo->update($data, $id);
         $allOrder = $this->orderRepo->getAllOrder();
         $allOrder =json_encode($allOrder);
+        $food = $this->foodRepo->findById($result['food_id']);
         DeleteUpdateOrderJob::dispatch($allOrder);
         $notificationData = [
             "table_name" => $data["table_name"],
+            "food_name" => $food->food_name,
             "notification_status" => "Cooking",
         ];
-        $createNotification = $this->notificationRepo->create($notificationData);
-        if($createNotification){
-             CreateNotificationJob::dispatch($createNotification);
-        }
+        $this->notificationService->createWaiterNotification($notificationData);
         return $result;
     }
 
@@ -177,15 +186,14 @@ class OrderService
         if($result){
             $allOrder = $this->orderRepo->getAllOrder();
             $allOrder =json_encode($allOrder);
+            $food = $this->foodRepo->findById($data['food_id']);
             DeleteUpdateOrderJob::dispatch($allOrder);
             $notificationData = [
                 "table_name" => $data["table_name"],
+                "food_name" => $food->food_name,
                 "notification_status" => "Done",
             ];
-            $createNotification = $this->notificationRepo->create($notificationData);
-            if($createNotification){
-                 CreateNotificationJob::dispatch($createNotification);
-            }
+            $createNotification = $this->notificationService->createWaiterNotification($notificationData);
         }
         
         return $result;

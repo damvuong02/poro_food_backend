@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;;
 
-use App\Jobs\CreateNotificationJob;
 use App\Services\BillService;
 use App\Services\WaiterNotificationService;
 use Illuminate\Http\Request;

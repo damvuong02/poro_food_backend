@@ -2,15 +2,11 @@
 
 namespace App\Services;
 
-use App\Jobs\CreateNotificationJob;
 use App\Jobs\DeleteUpdateOrderJob;
-use App\Jobs\PayBillJob;
 use App\Models\Bill;
 use App\Repositories\BillRepository;
 use App\Repositories\FoodRepository;
 use App\Repositories\OrderRepository;
-use App\Repositories\TableRepository;
-use App\Repositories\WaiterNotificationRepository;
 use Illuminate\Support\Facades\DB;
 
 class BillService{
@@ -18,18 +14,19 @@ class BillService{
     protected $orderRepo;
     protected $foodRepo;
     protected $notificationRepo;
+    protected $notificationService;
 
 
 
     /**
      * Class constructor.
      */
-    public function __construct(BillRepository $billRepository, FoodRepository $foodRepository, WaiterNotificationRepository $notificationRepository, OrderRepository $orderRepository)
+    public function __construct(BillRepository $billRepository, FoodRepository $foodRepository, WaiterNotificationService $notificationService, OrderRepository $orderRepository)
     {
         $this->billRepo = $billRepository;
         $this->orderRepo = $orderRepository;
         $this->foodRepo = $foodRepository;
-        $this->notificationRepo = $notificationRepository;
+        $this->notificationService = $notificationService;
 
     }
     
@@ -79,16 +76,12 @@ class BillService{
                 "table_name" => $data["table_name"],
                 "notification_status" => "Clean",
             ];
-            $createNotification = $this->notificationRepo->create($notificationData);
-            if($createNotification){
-                 CreateNotificationJob::dispatch($createNotification);
-            }
+            $createNotification = $this->notificationService->createWaiterNotification($notificationData);
 
             //send event UpdateOrder
             $allOrder = $this->orderRepo->getAllOrder();
             $allOrder =json_encode($allOrder);
             DeleteUpdateOrderJob::dispatch($allOrder);
-            PayBillJob::dispatch($data["table_name"]);
             // Commit transaction nếu tất cả các xử lý đều thành công
             DB::commit();
             return $bill;
