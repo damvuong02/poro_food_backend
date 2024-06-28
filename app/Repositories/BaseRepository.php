@@ -63,12 +63,15 @@ abstract class BaseRepository implements RepositoryInterface{
         return false;
     }
     function delete($id){
-        $result = $this->model->find($id);
-        if($result){
-            $result->delete($id);
-            return true;
+        try {
+            $result = $this->model->find($id);
+            if($result){
+                $result->delete($id);
+                return true;
+            }
+            return false;
+        } catch (\Exception $e) {
         }
-        return false;
     }
     function search(string $column,$value)
     {
