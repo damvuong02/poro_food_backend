@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('food_image')->nullable();
             $table->string('food_unit')->nullable();
             $table->unsignedInteger('quantity_sold')->default(0);
-            $table->boolean('need_cooking')->default(0);
+            $table->boolean('need_cooking')->default(1);
             $table->timestamps();
         });
     }
@@ -31,6 +31,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('orders');
+        Schema::dropIfExists('waiter_notifications');
         Schema::dropIfExists('foods');
     }
 };

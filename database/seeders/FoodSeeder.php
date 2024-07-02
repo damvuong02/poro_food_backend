@@ -18,7 +18,7 @@ class FoodSeeder extends Seeder
         $faker = Faker::create();
         //Trả về 1 mảng các value trong cột "id"
         $cates = Category::pluck('id');
-        for ($i=0; $i < 15; $i++) { 
+        for ($i=0; $i < 15; $i++) {
             Food::create([
                 'food_name'=>$faker->name(),
                 'category_id'=>$faker->randomElement($cates),

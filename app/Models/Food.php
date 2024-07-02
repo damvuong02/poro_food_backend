@@ -24,8 +24,12 @@ class Food extends BaseModel
     {
         return $this->belongsTo(Category::class);
     }
-    public function orders() {
-        return $this->hasMany(Order::class);
+    public function bills(){
+        return $this->belongsToMany(Bill::class,'orders','food_id','bill_id');
     }
-    
+
+    public function waiter_notification()
+    {
+        return $this->hasMany(WaiterNotification::class);
+    }
 }

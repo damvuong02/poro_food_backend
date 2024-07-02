@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Food;
+use App\Models\Table;
 use App\Models\WaiterNotification;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,11 +17,14 @@ class WaiterNotificationSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        foreach (range(1, 20) as $index) {
-           WaiterNotification::create([
-               'table_name' => "Bàn ".$faker->numberBetween(0, 9),
-                'notification_status' => $faker->randomElement(['Clean', 'Cooking', 'Done']), 
-                'food_name' => "Food ".$faker->numberBetween(1, 5), 
+        $tableIds = Table::pluck('id');
+        $foodIds = Food::pluck('id');
+
+        for ($i = 0; $i < 50; $i++) {
+            WaiterNotification::create([
+                'table_id' => $faker->randomElement($tableIds),
+                'notification_status' => $faker->randomElement(['New', 'In Progress', 'Completed']),
+                'food_id' => $faker->randomElement($foodIds),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

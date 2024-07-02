@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Account;
 use App\Models\Bill;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Table;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 class BillSeeder extends Seeder
@@ -15,12 +16,14 @@ class BillSeeder extends Seeder
     {
         //
         $faker = Faker::create();
-
-        foreach (range(1, 10) as $index) {
+        $accountIds = Account::pluck('id');
+        $tableIds = Table::pluck('id');
+        for ($i = 0; $i < 50; $i++) {
             Bill::create([
-                'account_id' => $faker->numberBetween(1, 10), // Assuming 10 accounts exist
-                'bill_detail' => $faker->paragraph(),
-                'table_name' => $faker->randomElement(['Bàn 1', 'Bàn 2', 'Bàn 3', 'Bàn 4', 'Bàn 5', 'Bàn 6', 'Bàn 7']),
+                'account_id' => $faker->randomElement($accountIds),
+                'table_id' => $faker->randomElement($tableIds),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
     }

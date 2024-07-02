@@ -13,5 +13,13 @@ class Table extends BaseModel
         'table_name',
         'table_status',
     ];
-    
+
+    public function bills()
+    {
+        return $this->belongsTo(Bill::class);
+    }
+
+    public function foods(){
+        return $this->belongsTo(Food::class);
+    }
 }

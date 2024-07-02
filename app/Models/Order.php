@@ -11,14 +11,13 @@ class Order extends BaseModel
 
     protected $fillable = [
         'food_id',
+        'bill_id',
         'price',
         'quantity',
-        'table_name',
         'order_status',
         'note',
-
     ];
     public function food() {
         return $this->belongsTo(Food::class);
-    }   
+    }
 }

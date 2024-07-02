@@ -11,11 +11,17 @@ class Bill extends BaseModel
 
     protected $fillable = [
         'account_id',
-        'bill_detail',
-        'table_name',
-        'created_at'
+        'table_id',
     ];
     public function account() {
         return $this->BelongsTo(Account::class);
+    }
+    public function table()
+    {
+        return $this->BelongsTo(Table::class);
+    }
+    public function foods()
+    {
+        return $this->BelongsToMany(Food::class,'orders','bill_id','food_id');
     }
 }

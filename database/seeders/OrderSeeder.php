@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Bill;
+use App\Models\Food;
 use App\Models\Order;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,14 +19,20 @@ class OrderSeeder extends Seeder
     {
         //
         $faker = Faker::create();
-        foreach (range(1, 20) as $index) {
-           Order::create([
-                'food_id' => $faker->numberBetween(1, 10), // Assuming 10 different food items
-                'quantity' => $faker->numberBetween(1, 5), // Random quantity between 1 and 5
-                'price' => $faker->numberBetween(10000, 200000), // Random price between 5 and 20
-                'table_name' => "Bàn ".$faker->numberBetween(0, 9), // Random table name
-                'order_status' => $faker->randomElement(['New', 'Cooking', 'Done']), 
-                'note' => "ss", // Random note
+        $foodIds = Food::pluck('id');
+        $billIds = Bill::pluck('id');
+
+        for ($i = 0; $i < 50; $i++) {
+            $foodId = $faker->randomElement($foodIds);
+            $food = Food::find($foodId);
+
+            Order::create([
+                'food_id' => $foodId,
+                'bill_id' => $faker->randomElement($billIds),
+                'quantity' => random_int(1, 10),
+                'price' => $food->price,
+                'order_status' => $faker->randomElement(['New', 'Cooking', 'Done']),
+                'note' => $faker->sentence(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
